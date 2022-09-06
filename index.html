@@ -4,9 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
+    <link rel="stylesheet" href="CSS.CSS" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Raph.otos</title>
 </head>
 <body>
- <h1> Mon site vitrine</h1>   
-</body>
+ <h1> raphael photographie</h1>
+
+ <button type="button" id="togg1" class="button" onclick="changeStyle()">  <span class="material-symbols-outlined"> 
+    menu
+    </span>
+</button>
+
+<nav id="nav"> 
+    <ul class="menu">
+        <li><a href="#index.html">Accueil</a></li>
+        <li><a href="https://www.youtube.com/channel/UCEb_NXhHa8v7JSQQ84X4GaA">Vidéos</a></li>
+        <li><a href="#a-propos.html">A propos</a></li>
+        <li><a href="https://www.instagram.com/raph.otos/">Contact</a></li>
+
+    </ul>
+</nav>
+
+<input type="button" class="enter-button" value="Entrer" onclick="window.location.href = 'accueil.html';"></button>
+
+<div class="images-entree">
+    <img src="images/perce1.jpg" class="images-index">
+    <img src="images/paris2.jpg" class="images-index">
+    <img src="images/montreal3.jpg" class="images-index">
+    <img src="images/chat_bokeh2.jpg" class="images-index">
+</div>
+
+<div class="footer">
+    <p>(CC by nc) Raphaël Plassart - all rights reserved</p>
+</div>
+    <script>
+let togg1 = document.getElementById("togg1");
+let nav = document.getElementById("nav");
+
+togg1.addEventListener("click", () => {
+  if(getComputedStyle(nav).display != "none"){
+    nav.style.display = "none";
+
+  } else {
+    nav.style.display = "block";
+  }
+})
+    </script>
+</body>   
 </html>
+
