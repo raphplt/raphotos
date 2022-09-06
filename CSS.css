@@ -113,6 +113,50 @@ background: rgb(68, 66, 66);
 color: white;
 }
 
+.contenant
+{
+    margin-top: 60px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.redirection_img
+{
+    margin-left: 20px;
+    width: 80vw;
+
+}
+
+.contenant p
+{
+    font-size: 1.15rem;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    margin-left: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.accueil_header
+{
+    display: inline block;
+    background: #C6E1E7;
+    text-align: center;
+
+}
+
+.accueil_header header
+{
+    font-size: 2.5em;
+}
+
+.accueil_header .ig_logo
+{
+    width: 5%;
+}
+
+
 @media screen and (min-width:768px) {
     .enter-button
     {
