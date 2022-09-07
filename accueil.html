@@ -10,6 +10,18 @@
 </head>
 <body>
 
+<div class="loader">
+    <span class="lettre">C</span>
+    <span class="lettre">H</span>
+    <span class="lettre">A</span>
+    <span class="lettre">R</span>
+    <span class="lettre">G</span>
+    <span class="lettre">E</span>
+    <span class="lettre">M</span>
+    <span class="lettre">E</span>
+    <span class="lettre">N</span>
+    <span class="lettre">T</span>
+</div>
 
 <div class="accueil_header">    
     <a href="index.html"><header>raphotos</header></a>
@@ -48,6 +60,13 @@
     <div class="cc">    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />Ce(tte) œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale 4.0 International</a>.
     </div>
 </div>
+<script>const loader = document.querySelector('.loader');
 
+    window.addEventListener('load', () => {
+    
+        loader.classList.add('fondu-out');
+        loader.style.visibility= "hidden";
+    
+    })</script>
 </body>
 </html>
