@@ -107,10 +107,15 @@ a:visited, a:link
 border-top: 15px solid rgb(68, 66, 66);
 bottom:0;
 width:100%;
-height:50px;
+height:150px;
 text-align: center;
 background: rgb(68, 66, 66);
 color: white;
+}
+
+.cc
+{
+    margin-top: 20px;
 }
 
 .contenant
@@ -164,6 +169,90 @@ color: white;
 .accueil_header .ig_logo
 {
     width: 5%;
+}
+
+.images-entree1
+{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 85%;
+    margin: 0 auto;
+}
+
+.images-sous
+{
+    display: block;
+    margin: 0 auto;
+    width: 100vw;
+}
+
+.images-sous1
+{
+    display: block;
+    margin: 0 auto;
+    width: 27vw;
+    margin-bottom: 30px;
+}
+
+.sous-page{
+    margin-bottom: 50px;
+}
+
+.images-entree .material-symbols-outlined
+{
+    margin: 10px;
+    margin-bottom: 20px;
+}
+
+.descriptions
+{
+    margin-top: 10px;
+    width: 95%;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+
+.remonter {
+    height: 50px;
+    width: 50px;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    cursor: pointer;
+}
+
+.loader
+{
+    visibility: hidden;
+}
+
+.temp
+{
+    margin-top: 100px;
+    color: gray;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.apropos
+{
+    font-size: 1.3em;
+    width: 80%;
+    background: #e8e1c9;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    margin-top: 80px;
+    margin-top: 20px;
+    border: 10px solid transparent;
 }
 
 
@@ -239,6 +328,10 @@ color: white;
     {
         width: 2.25%;
     }
+    .apropos
+    {
+        width: 60%;
+    }
 }
 
 @media screen and (min-width: 1024px) {
@@ -268,8 +361,19 @@ color: white;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    width: 70%;
+    margin: 0 auto;
     }
 
+    .images-entree1
+    {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        width: 70%;
+        margin: 0 auto;
+    }
     .images-index
     {
         width: 48%;
@@ -300,8 +404,119 @@ color: white;
         margin-left: 50px;
     }
 
+    .sous-page
+    {
+        margin-bottom: 70px;
+    }
+
     .accueil_header .ig_logo
     {
         width: 1.75%;
+    }
+
+
+    .images-sous
+    {
+        width: 30vw;
+        margin-bottom: 70px;
+    }
+
+    .images-sous1
+    {
+        width: 15vw;
+        margin-bottom: 70px;
+    }
+    .images-entree .material-symbols-outlined
+    {
+        margin: 0px;
+        margin-bottom: 0px;
+    }
+
+    .remonter {
+        height: 50px;
+        width: 50px;
+        background: rgb(107, 100, 214);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        right: 30px;
+        bottom: 30px;
+        cursor: pointer;
+    }
+
+    .apropos{
+        width: 25%;
+        margin-top: 75px;
+        border: 40px solid transparent;
+    }
+
+    .loader {
+        visibility: visible;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgb(255, 255, 255);
+        display: flex; 
+        justify-content: center;
+        align-items: center;
+    }
+    .lettre {
+        color: #484848;
+        font-size: 60px;
+        letter-spacing: 15px;
+        margin-bottom: 150px;
+        animation: flash 1.2s linear infinite;
+    }
+    @keyframes flash {
+        0% {
+            color: #3196e9;
+            text-shadow: 0 0 7px #3196e9;
+        }
+        90% {
+            color: #000000;
+            text-shadow: none;
+        }
+        100% {
+            color: #3196e9;
+            text-shadow: 0 0 7px #3196e9;
+        }
+    }
+    
+    .lettre:nth-child(1){
+        animation-delay: 0.1s;
+    }
+    .lettre:nth-child(2){
+        animation-delay: 0.2s;
+    }
+    .lettre:nth-child(3){
+        animation-delay: 0.3s;
+    }
+    .lettre:nth-child(4){
+        animation-delay: 0.4s;
+    }
+    .lettre:nth-child(5){
+        animation-delay: 0.5s;
+    }
+    .lettre:nth-child(6){
+        animation-delay: 0.6s;
+    }
+    .lettre:nth-child(7){
+        animation-delay: 0.7s;
+    }
+    .lettre:nth-child(8){
+        animation-delay: 0.8s;
+    }
+    .lettre:nth-child(9){
+        animation-delay: 0.9s;
+    }
+    .lettre:nth-child(10){
+        animation-delay: 1s;
+    }
+    
+    .fondu-out {
+        opacity: 0;
+        transition: opacity 0.4s ease-out;
     }
 }
