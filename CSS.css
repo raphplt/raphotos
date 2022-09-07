@@ -153,7 +153,6 @@ color: white;
     display: inline block;
     background: #C6E1E7;
     text-align: center;
-
 }
 
 .accueil_header header
@@ -227,6 +226,12 @@ color: white;
     right: 30px;
     bottom: 30px;
     cursor: pointer;
+}
+
+.back
+{
+    margin-left: 10px;
+    margin-top: 10px;
 }
 
 .loader
@@ -444,6 +449,18 @@ color: white;
         right: 30px;
         bottom: 30px;
         cursor: pointer;
+    }
+
+    .back
+{
+    margin-left: 12px;
+    margin-top: 12px;
+}
+
+
+    .sous-page .descriptions
+    {
+        font-size: 1.75em;
     }
 
     .apropos{
