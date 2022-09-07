@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS.CSS" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Raph.otos</title>
+</head>
+
+<body>
+
+    <div class="loader">
+        <span class="lettre">C</span>
+        <span class="lettre">H</span>
+        <span class="lettre">A</span>
+        <span class="lettre">R</span>
+        <span class="lettre">G</span>
+        <span class="lettre">E</span>
+        <span class="lettre">M</span>
+        <span class="lettre">E</span>
+        <span class="lettre">N</span>
+        <span class="lettre">T</span>
+    </div>
+
+<div class="remonter">
+    <span class="material-symbols-outlined">
+        arrow_upward
+        </span>
+</div>
+
+<div class="sous-page">
+    <h1>Paris</h1>
+    <p class="descriptions">Je suis allé à Paris en début août (2022), j'en ai profité pour shooter cette magnifique ville.</p> 
+</div>
+
+<div class="images-entree">
+
+<img src="images/paris1.jpg" class="images-sous">
+<a href="images/paris1.jpg" download='' class="dl">
+<span class="material-symbols-outlined">
+    download
+    </span>
+    <i class="fa fa-download"></i></a>
+<img src="images/paris2.jpg" class="images-sous">
+<a href="images/paris2.jpg" download='' class="dl">
+    <span class="material-symbols-outlined">
+        download
+        </span>
+        <i class="fa fa-download"></i></a>
+<img src="images/paris 3.jpg" class="images-sous">
+<a href="images/paris3.jpg" download='' class="dl">
+    <span class="material-symbols-outlined">
+        download
+        </span>
+        <i class="fa fa-download"></i></a>
+<img src="images/paris4.jpg" class="images-sous">
+<a href="images/paris4.jpg" download='' class="dl">
+    <span class="material-symbols-outlined">
+        download
+        </span>
+        <i class="fa fa-download"></i></a>
+<img src="images/paris5.jpg" class="images-sous">
+<a href="images/paris5.jpg" download='' class="dl">
+    <span class="material-symbols-outlined">
+        download
+        </span>
+        <i class="fa fa-download"></i></a>
+
+</div>
+
+
+
+
+<div class="footer">
+    <p>(CC by nc) Raphaël Plassart - all rights reserved</p>
+</div>
+
+<script>
+const btn = document.querySelector('.remonter');
+
+    btn.addEventListener('click', () => {
+    
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        })
+    
+    })
+    </script>
+<script>const loader = document.querySelector('.loader');
+
+    window.addEventListener('load', () => {
+    
+        loader.classList.add('fondu-out');
+    
+    })</script>
+</body>
+</html>
