@@ -213,6 +213,13 @@ color: white;
     text-align: center;
 }
 
+.popup
+{
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1.2em;
+}
 
 .remonter {
     z-index: 1;
@@ -408,6 +415,11 @@ color: white;
     .apropos
     {
         width: 60%;
+    }
+    .popup
+    {
+        margin-top: 0px;
+        font-size: 1.5em;
     }
 }
 
