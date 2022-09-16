@@ -1,12 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Poppins:wght@100&display=swap');
 
 
-*
-{
+*{
   margin: 0;
   padding: 0; 
   list-style: none;
-  text-decoration: none;
   font-family: 'Nunito', sans-serif;
   scroll-behavior: smooth;
   box-sizing: border-box;
@@ -14,21 +12,18 @@
   text-decoration: none;
 }
 
-:root
-{
+:root{
   font-size: 12.5px;
   text-decoration: none;
 }
 
-h1
-{
+h1{
     text-align: center;
     margin-top: 7%;
     font-size: 2rem;
 }
 
-.button
- {
+.button{
     background: transparent;
     border: solid transparent;
     display: block;
@@ -37,23 +32,20 @@ h1
     margin-bottom: 20px;
 }
  
-nav
-{
+nav{
     position: relative;
     display: none;
     text-align: center;
     width: 100%;
 }
 
-.menu
-{
+.menu{
     display: block;
     margin: 0 auto;
     position: relative;
 }
 
-li
-{
+.li_nav{
     background-color:#F5F0E0;   
     color: black;
     height: 130px;
@@ -63,20 +55,14 @@ li
 
 }
 
-a:visited, a:link
-{
-    color: black;
-}
 
-.random
-{
+.random{
     display: block;
     text-align: center;
     font-size: 1.5em;
 }
 
-.enter-button
-{
+.enter-button{
     font-size: 2em;
     display: block;
     position: relative;
@@ -89,57 +75,83 @@ a:visited, a:link
     margin-bottom: 50px;
 }
 
-.enter-button:hover
-{
+.enter-button:hover{
     box-shadow: 7px -6px rgb(166, 132, 7);
 }
 
-.images-index
-{
-
+.images-index{
     display: block;
     margin: 0 auto;
     width: 100vw;
 }
 
-.footer
-{
-border-top: 15px solid rgb(68, 66, 66);
-bottom:0;
-width:100%;
-height:150px;
-text-align: center;
-background: rgb(68, 66, 66);
-color: white;
+.footer{
+    border-top: 45px solid rgb(68, 66, 66);
+    bottom:0;
+    width:100%;
+    height:700px;
+    background: rgb(68, 66, 66);
+    color: white;
+
 }
 
-.cc
-{
+.footer-tab{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.footer-tab ul{
+    width: 51%;
+    margin-bottom: 5px;
+    flex-direction: column;
+}
+
+.footer-tab li{
+    font-size: 1.3em;
+    margin-left: 40px;
+    margin-bottom: 5px;
+}
+
+.footer-tab p{
+
+    font-size: 2em;
+    margin-top: 4px;
+    margin-left: 25px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+    text-decoration-color: orange;
+}   
+
+.cc{
     margin-top: 20px;
+    text-align: center;
 }
 
-.contenant
-{
+a:link, a:visited{
+    color: black;
+}
+
+.footer a:link,.footer a:visited{
+    color: white;
+}
+.contenant{
     margin-top: 60px;
     margin-bottom: 30px;
     display: flex;
     flex-wrap: wrap;
 }
 
-.redirection_img
-{
+.redirection_img{
     margin-left: 20px;
     width: 80vw;
 
 }
 
-.redirection_img:hover
-{
+.redirection_img:hover{
     filter: brightness(40%);
 }
 
-.contenant p
-{
+.contenant p{
     font-size: 1.15rem;
     writing-mode: vertical-lr;
     text-orientation: upright;
@@ -148,30 +160,25 @@ color: white;
     text-align: center;
 }
 
-.accueil_header
-{
+.accueil_header{
     display: inline block;
     background: #C6E1E7;
     text-align: center;
 }
 
-.accueil_header header
-{
+.accueil_header header{
     font-size: 2.5em;
 }
 
-.accueil_header .ig_logo
-{
+.accueil_header .ig_logo{
     width: 5%;
 }
 
-.accueil_header .ig_logo
-{
+.accueil_header .ig_logo{
     width: 5%;
 }
 
-.images-entree1
-{
+.images-entree1{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -180,15 +187,13 @@ color: white;
     margin: 0 auto;
 }
 
-.images-sous
-{
+.images-sous{
     display: block;
     margin: 0 auto;
     width: 100vw;
 }
 
-.images-sous1
-{
+.images-sous1{
     display: block;
     margin: 0 auto;
     width: 27vw;
@@ -199,29 +204,26 @@ color: white;
     margin-bottom: 50px;
 }
 
-.images-entree .material-symbols-outlined
-{
+.images-entree .material-symbols-outlined{
     margin: 10px;
     margin-bottom: 20px;
 }
 
-.descriptions
-{
+.descriptions{
     margin-top: 10px;
     width: 100%;
     font-size: 1.3em;
     text-align: center;
 }
 
-.popup
-{
+.popup{
     display: block;
     text-align: center;
     margin-top: 10px;
     font-size: 1.2em;
 }
 
-.remonter {
+.remonter{
     z-index: 1;
     height: 50px;
     width: 50px;
@@ -236,27 +238,23 @@ color: white;
     cursor: pointer;
 }
 
-.back
-{
+.back{
     margin-left: 10px;
     margin-top: 10px;
 }
 
-.loader
-{
+.loader{
     visibility: hidden;
 }
 
-.temp
-{
+.temp{
     margin-top: 100px;
     color: gray;
     text-align: center;
     margin-bottom: 30px;
 }
 
-.apropos
-{
+.apropos{
     font-size: 1.3em;
     width: 80%;
     background: #e8e1c9;
@@ -268,7 +266,7 @@ color: white;
     border: 10px solid transparent;
 }
 
-.loader {
+.loader{
     z-index: 2;
     visibility: visible;
     position: absolute;
@@ -280,7 +278,7 @@ color: white;
     align-items: center;
 }
 
-.lettre {
+.lettre{
     color: #484848;
     font-size: 1.5em ;
     letter-spacing: 15px;
@@ -345,40 +343,39 @@ color: white;
         font-size: 1.45em;
         margin: 20px;
     }
-    .redirection_img
-    {
+    .redirection_img{
         margin-left: 30px;
+    }
+    .footer-tab ul{
+        width: 50%;
+    }
+    .footer{
+        height:550px;
     }
 }
 
 @media screen and (min-width:768px) {
-    h1
-    {
+    h1{
         font-size: 3em;
     }
 
-    .button
-    {
+    .button{
         visibility: hidden;
     }
-    nav
-    {
-
+    nav{     
         display: flex;
         border: solid transparent;
         margin: 0 auto;
     }
 
-    .menu
-    {
+    .menu{
         display: flex;
         flex-wrap: wrap;
         margin: 0 auto;
         position: relative;
     }
     
-    li
-    {
+    .li_nav{
         margin-left: 50px;
         margin-right: 50px;
         background: transparent;
@@ -390,13 +387,12 @@ color: white;
     
     }
 
-    a:visited, a:link
-    {
-        color: rgb(0, 0, 0);
+    .cc{
+        margin-top: 20px;
+        text-align: center;
     }
 
-    .enter-button
-    {
+    .enter-button{
         font-size: 3em;
         margin-top: 0px;
         margin-bottom:100px;
@@ -408,44 +404,65 @@ color: white;
         margin: 35px;
     }
 
-    .accueil_header .ig_logo
-    {
+    .accueil_header .ig_logo{
         width: 2.25%;
     }
-    .apropos
-    {
+    .apropos{
         width: 60%;
     }
-    .popup
-    {
+    .popup{
         margin-top: 0px;
-        font-size: 1.5em;
+        font-size: 1.5em;    
+    }
+    .footer-tab ul{
+        width: 30%;
+    }
+
+    .footer-tab li{
+        font-size: 1.3em;
+        margin-left: 50px;
+        margin-bottom: 6px;
+        transition: all 0.3s ease;
+    }
+
+
+    .footer-tab li:hover{
+        margin-left: 60px;
+    }
+
+    .footer-tab p{
+    
+        font-size: 2em;
+        margin-top: 4px;
+        margin-left: 45px;
+        margin-bottom: 10px;
+        text-decoration: underline;
+        text-decoration-color: orange; 
+    }
+    .footer{
+        height:400px;
     }
 }
 
 @media screen and (min-width: 1024px) {
-    h1
-    {
+    h1{
         font-size: 4em;
         margin-top: 30px;
     }
 
-    .button
-    {
+    .button{
         visibility: hidden;
     }
     
     
-    .enter-button
-    {
+    .enter-button{
         font-size: 3.25em;
         margin-top: 100px;
         margin-bottom: 160px;
         border: 10px solid transparent;
     }
 
-    .images-entree
-    {
+    .images-entree{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -454,8 +471,7 @@ color: white;
     margin: 0 auto;
     }
 
-    .images-entree1
-    {
+    .images-entree1{
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -463,65 +479,55 @@ color: white;
         width: 70%;
         margin: 0 auto;
     }
-    .images-index
-    {
+    .images-index{
         width: 48%;
         margin-bottom: 40px;
     }
 
-    .accueil_header
-    {
+    .accueil_header{
         border: 8px solid transparent;
         font-size: 1.5em;
         margin-bottom: 70px;
     }
 
-    .redirection_img
-    {
+    .redirection_img{
         width: 27.5vw;
 
     }
-    .main
-    {
+    .main{
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
     }
 
-    .contenant p
-    {
+    .contenant p{
         margin-left: 50px;
     }
 
-    .sous-page
-    {
+    .sous-page{
         margin-bottom: 70px;
     }
 
-    .accueil_header .ig_logo
-    {
+    .accueil_header .ig_logo{
         width: 1.75%;
     }
 
 
-    .images-sous
-    {
+    .images-sous{
         width: 30vw;
         margin-bottom: 70px;
     }
 
-    .images-sous1
-    {
+    .images-sous1{
         width: 15vw;
         margin-bottom: 70px;
     }
-    .images-entree .material-symbols-outlined
-    {
+    .images-entree .material-symbols-outlined{
         margin: 0px;
         margin-bottom: 0px;
     }
 
-    .remonter {
+    .remonter{
         height: 50px;
         width: 50px;
         background: rgb(107, 100, 214);
@@ -535,15 +541,12 @@ color: white;
         cursor: pointer;
     }
 
-    .back
-{
+    .back{
     margin-left: 12px;
     margin-top: 12px;
 }
 
-
-    .sous-page .descriptions
-    {
+    .sous-page .descriptions{
         font-size: 1.75em;
     }
 
@@ -553,7 +556,7 @@ color: white;
         border: 40px solid transparent;
     }
 
-    .loader {
+    .loader{
         visibility: visible;
         position: absolute;
         width: 100%;
@@ -563,11 +566,24 @@ color: white;
         justify-content: center;
         align-items: center;
     }
-    .lettre {
+    .lettre{
         color: #484848;
         font-size: 60px;
         letter-spacing: 15px;
         margin-bottom: 150px;
         animation: flash 1.2s linear infinite;
-}
+    }
+
+    .footer-tab ul{
+        width: 20%;
+    }
+
+    .footer-tab{
+        justify-content: center;
+    }
+
+    .cc{
+        margin-top: 40px;
+        text-align: center;
+    }
 }
