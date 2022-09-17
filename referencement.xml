@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-		<!--	created with www.mysitemapgenerator.com	-->
 		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 	<loc>https://www.raphotos.fr/</loc>
@@ -38,6 +37,26 @@
 </url>
 <url>
 	<loc>https://www.raphotos.fr/wallpapers.html</loc>
+	<lastmod>2022-09-13T01:41:37+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://www.raphotos.fr/mentions-legales.html</loc>
+	<lastmod>2022-09-13T01:41:37+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://www.raphotos.fr/fall22.html</loc>
+	<lastmod>2022-09-13T01:41:37+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://www.raphotos.fr/sitemap.html</loc>
+	<lastmod>2022-09-13T01:41:37+01:00</lastmod>
+	<priority>1.0</priority>
+</url>
+<url>
+	<loc>https://www.raphotos.fr/accueil.html</loc>
 	<lastmod>2022-09-13T01:41:37+01:00</lastmod>
 	<priority>1.0</priority>
 </url>
