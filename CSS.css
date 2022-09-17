@@ -421,21 +421,21 @@ a:link, a:visited{
 
     .footer-tab li{
         font-size: 1.3em;
-        margin-left: 50px;
+        margin-left: 90px;
         margin-bottom: 6px;
         transition: all 0.3s ease;
     }
 
 
     .footer-tab li:hover{
-        margin-left: 60px;
+        margin-left: 95px;
     }
 
     .footer-tab p{
     
         font-size: 2em;
         margin-top: 4px;
-        margin-left: 45px;
+        margin-left: 80px;
         margin-bottom: 10px;
         text-decoration: underline;
         text-decoration-color: orange; 
