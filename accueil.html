@@ -23,7 +23,14 @@
         <span class="lettre">N</span>
         <span class="lettre">T</span>
     </div>
+
+<div class="remonter">
+    <span class="material-symbols-outlined">
+        arrow_upward
+        </span>
+</div>
     
+
 <div class="accueil_header">    
     <a href="index.html"><header>raphotos</header></a>
     <a href="https://www.instagram.com/raph.otos/"><img src="images/ig_logo.png.opdownload" class="ig_logo"></a>
@@ -98,7 +105,19 @@
       <div class="cc"><p>(CC by nc) Raphaël Plassart - all rights reserved </p>   <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Licence Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />Ce(tte) œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Licence Creative Commons Attribution - Pas d’Utilisation Commerciale 4.0 International</a>.
       </div>
   </div>
-  
+  <script>
+    const btn = document.querySelector('.remonter');
+    
+        btn.addEventListener('click', () => {
+        
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth"
+            })
+        
+        })
+        </script>
 <script>const loader = document.querySelector('.loader');
 
     window.addEventListener('load', () => {
