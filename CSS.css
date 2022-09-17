@@ -92,6 +92,7 @@ nav{
     height:700px;
     background: rgb(68, 66, 66);
     color: white;
+    margin: 0 auto;
 
 }
 
@@ -576,7 +577,9 @@ a:link, a:visited{
 
     .footer-tab ul{
         width: 20%;
+        text-align: left;
     }
+
 
     .footer-tab{
         justify-content: center;
