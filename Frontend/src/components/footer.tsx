@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-gray-800 text-white py-6 pb-12 bottom-0 w-full">
@@ -14,16 +16,16 @@ export default function Footer() {
             <h2 className="text-lg font-semibold mb-2">Pages</h2>
             <ul className="list-disc pl-3">
               <li>
-                <a href="/decouvrir">Découvrir</a>
+                <Link href="/decouvrir">Photos</Link>
               </li>
               <li>
-                <a href="/blog">Blog</a>
+                <Link href="/blog">Blog</Link>
               </li>
               <li>
-                <a href="/shop">Shop</a>
+                <Link href="/shop">Shop</Link>
               </li>
               <li>
-                <a href="/a-propos">A propos</a>
+                <Link href="/a-propos">A propos</Link>
               </li>
             </ul>
           </div>
@@ -31,16 +33,16 @@ export default function Footer() {
             <h2 className="text-lg font-semibold mb-2">Ressources</h2>
             <ul className="list-disc pl-3">
               <li>
-                <a href="/decouvrir">Plan du site</a>
+                <Link href="/decouvrir">Plan du site</Link>
               </li>
               <li>
-                <a href="/decouvrir">Mentions légales</a>
+                <Link href="/decouvrir">Mentions légales</Link>
               </li>
               <li>
-                <a href="/decouvrir">Confidentialité</a>
+                <Link href="/decouvrir">Confidentialité</Link>
               </li>
               <li>
-                <a href="/decouvrir">Ventes et remboursement</a>
+                <Link href="/decouvrir">Ventes et remboursement</Link>
               </li>
             </ul>
             <ul className="list-disc pl-3"></ul>

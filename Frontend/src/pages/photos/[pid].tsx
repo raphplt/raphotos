@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Footer from "@/components/footer";
 
 export default function Decouvrir({ directoryName, imagePaths }: any) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -69,13 +70,17 @@ export default function Decouvrir({ directoryName, imagePaths }: any) {
         <FontAwesomeIcon icon={faArrowUp} className="w-4" />
       </a>
       <div className="w-10/12 mx-auto mt-12 mb-24">
-        <Link href={"/decouvrir"}>
+        <Link href={"/photos"}>
           <FontAwesomeIcon className="w-4 pt-6" icon={faArrowLeft} />
         </Link>
         <h1 className="mb-12 text-2xl text-center">
           ---- {directoryName} ----
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mx-auto">
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-3 gap-5 mx-auto ${
+            directoryName == "Wallpapers" && "w-4/5"
+          }`}
+        >
           {imagePaths.map((imagePath: any, index: any) => (
             <div
               key={index}
@@ -119,7 +124,7 @@ export default function Decouvrir({ directoryName, imagePaths }: any) {
           `}
         </style>
       </div>
-      {selectedImage && (
+      {selectedImage && directoryName !== "Wallpapers" && (
         <div
           onClick={closeImage}
           className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center"
@@ -133,6 +138,7 @@ export default function Decouvrir({ directoryName, imagePaths }: any) {
           />
         </div>
       )}
+      <Footer />
     </div>
   );
 }

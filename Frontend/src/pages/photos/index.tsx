@@ -13,15 +13,15 @@ export default function Decouvrir({ imagePaths }: any) {
       <Metadata />
       <Header />
       <div className="w-10/12 mx-auto mb-24">
-        <h1 className="my-8 text-2xl text-center">---- Découvrir ----</h1>
+        <h1 className="my-8 text-2xl text-center mt-16">---- Photos ----</h1>
         <div className="grid grid-cols-3 gap-5 mx-auto ">
           {imagePaths.map((imagePath: any, index: any) => {
             const lastSubfolder = path.basename(path.dirname(imagePath));
             return (
               <Link
                 key={index}
-                href={`/decouvrir/${lastSubfolder}`}
-                className="flex group/item justify-center items-center flex-col drop-shadow-md mb-5"
+                href={`/photos/${lastSubfolder}`}
+                className="flex group/item justify-center items-center flex-col drop-shadow-md mb-3"
               >
                 <span className="mb-2 group-hover/item:underline underline-offset-2">
                   {lastSubfolder}
@@ -30,7 +30,7 @@ export default function Decouvrir({ imagePaths }: any) {
                   <Image
                     src={imagePath}
                     alt={`Image ${index}`}
-                    className="group/img w-[30vw] hover:opacity-80 transition-opacity duration-200"
+                    className="group/img w-[30vw] hover:opacity-70 transition-opacity duration-200"
                     width={1000}
                     height={700}
                   />
