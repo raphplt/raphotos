@@ -13,4 +13,9 @@ module.exports = {
     },
   },
   plugins: [],
+  variants: {
+    extend: {
+      translate: ["hover", "focus"],
+    },
+  },
 };

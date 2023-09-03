@@ -13,11 +13,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
+import { useInView } from "react-intersection-observer";
 
 export default function Decouvrir({ directoryName, imagePaths }: any) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [hoveredImage, setHoveredImage] = useState(null);
   const [shouldHideArrow, setShouldHideArrow] = useState(true);
+  const [showMore, setShowMore] = useState(9);
+  const [showImages, setShowImages] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState<boolean[]>([]);
+
+  const graySquareStyle = {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#ccc",
+  };
 
   const openImage = (imagePath: any) => {
     setSelectedImage(imagePath);
@@ -57,47 +67,60 @@ export default function Decouvrir({ directoryName, imagePaths }: any) {
     event.stopPropagation();
     openImage(imagePath);
   };
+
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.3,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      setShowImages(true);
+    }
+  }, [inView]);
   return (
     <div>
       <Metadata />
       <Header />
       <a
-        className={`py-3 px-3 bg-emerald-200 rounded-full w-10 h-10 fixed bottom-2 right-2 flex items-center justify-center ${
+        className={`py-3 px-3 w-10 bg-emerald-200 rounded-full z-20  h-10 fixed bottom-2 right-2 flex items-center justify-center ${
           shouldHideArrow ? "hidden" : ""
         }`}
         href="#top"
       >
         <FontAwesomeIcon icon={faArrowUp} className="w-4" />
       </a>
-      <div className="w-10/12 mx-auto mt-12 mb-24">
-        <Link href={"/photos"}>
+      <div className="w-11/12 sm:w-10/12 mx-auto mt-14 mb-24">
+        <Link href={"/photos"} className="w-fit">
           <FontAwesomeIcon className="w-4 pt-6" icon={faArrowLeft} />
         </Link>
-        <h1 className="mb-12 text-2xl text-center">
-          ---- {directoryName} ----
-        </h1>
+        <div className="mb-10">
+          <h1 className="text-lg mt-4 sm:text-2xl text-center bg-black text-white w-fit mx-auto px-24 py-1">
+            {directoryName}
+          </h1>
+          <p className="text-center mt-2 text-lg">{imagePaths.length} photos</p>
+        </div>
         <div
           className={`grid grid-cols-1 sm:grid-cols-3 gap-5 mx-auto ${
             directoryName == "Wallpapers" && "w-4/5"
           }`}
         >
-          {imagePaths.map((imagePath: any, index: any) => (
+          {imagePaths.slice(0, showMore).map((imagePath: any, index: any) => (
             <div
               key={index}
-              className="flex justify-center items-center flex-col relative overflow-hidden max-w-full"
+              ref={ref}
+              className="flex justify-center items-center flex-col relative overflow-hidden max-w-full "
               onMouseEnter={() => handleImageHover(imagePath)}
               onMouseLeave={handleImageHoverExit}
             >
               <button
                 onClick={(event) => handleImageClick(event as any, imagePath)}
+                className={`w-full  relative ${
+                  imageLoaded[index]
+                    ? "animate-none"
+                    : "animate-pulse h-2/3 bg-slate-600"
+                }`}
               >
-                <Image
-                  src={imagePath}
-                  alt={`Image ${index}`}
-                  className="w-full h-full object-cover zoomed-image transition-transform transform hover:scale-110"
-                  width={1000}
-                  height={1000}
-                />
                 {hoveredImage === imagePath && (
                   <a
                     href={imagePath}
@@ -107,10 +130,37 @@ export default function Decouvrir({ directoryName, imagePaths }: any) {
                     <FontAwesomeIcon icon={faDownload} className="w-4" />
                   </a>
                 )}
+
+                <Image
+                  src={imagePath}
+                  alt={`Image ${index}`}
+                  className="w-full h-full object-cover zoomed-image transition-transform transform hover:scale-110"
+                  width={1000}
+                  height={1000}
+                  placeholder="empty"
+                  onLoad={() => {
+                    setImageLoaded((prev) => {
+                      const newLoaded = [...prev];
+                      newLoaded[index] = true;
+                      return newLoaded;
+                    });
+                  }}
+                />
               </button>
             </div>
           ))}
         </div>
+        {showMore < imagePaths.length && (
+          <button
+            className="group relative px-4 py-2 overflow-hidden rounded-lg bg-white text-md shadow mx-auto flex items-center mt-10 border-[1px] border-[#1F2937]"
+            onClick={() => setShowMore(showMore + 9)}
+          >
+            <div className="absolute inset-0 w-3 bg-[#1F2937] transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+            <span className="relative text-[#1F2937] group-hover:text-white">
+              Voir plus d&apos;images
+            </span>
+          </button>
+        )}
         <style jsx>
           {`
             .zoomed-image {

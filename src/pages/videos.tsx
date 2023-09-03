@@ -7,9 +7,11 @@ export default function Decouvrir() {
     <div>
       <Metadata />
       <Header />
-      <h1>Mes vidéos</h1>
-      <div className=" mt-24 w-fit mx-auto flex flex-col justify-center items-center gap-20 mb-24">
-        <div>
+      <h1 className="mt-28 text-2xl text-center bg-black text-white w-fit mx-auto px-24 py-1">
+        Vidéos
+      </h1>
+      <div className=" mt-12 w-fit mx-auto flex flex-col justify-center items-center gap-16 bg-gray-800 py-12 px-96 rounded-lg mb-16 drop-shadow-md">
+        <div className="border-[1px] border-gray-600 py-6 rounded-lg px-10 bg-slate-200">
           <h2 className="mb-5 font-semibold text-center">
             Ma dernière vidéo :
           </h2>
@@ -23,7 +25,7 @@ export default function Decouvrir() {
             allowFullScreen
           ></iframe>
         </div>
-        <div>
+        <div className="border-[1px] border-gray-600 py-6 rounded-lg px-10 bg-slate-200">
           <h2 className="mb-5 font-semibold text-center">
             Mon voyage au Québec :
           </h2>
