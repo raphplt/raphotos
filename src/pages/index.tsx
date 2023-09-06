@@ -48,35 +48,39 @@ export default function Slider({ imagePaths }: any) {
       <Header />
 
       <div className="flex justify-center items-center mt-20 mb-16">
-        <button onClick={goToPreviousImage} className="w-64 h-64 mr-2 sm:mr-12">
+        <button
+          onClick={goToPreviousImage}
+          className="w-64 h-64 mr-2 sm:mr-12 hidden sm:block"
+        >
           <img
             src={imagePaths[prevImageIndex]}
             alt={`Image ${prevImageIndex}`}
             className="rounded-md border-[1px] border-gray-500 drop-shadow-md"
           />
         </button>
-        <div className="flex">
+        <div className="flex justify-center sm:justify-normal mx-auto sm:mx-0">
           {imagePaths.map((imagePath: any, index: any) => (
             <div
               key={index}
-              className={`w-[40vw] mx-2 mt-8 transition-opacity duration-400 ${
+              className={`w-10/12  flex-col flex sm:gap-0 gap-2 sm:w-[40vw] mx-2 mt-8 transition-opacity duration-400 ${
                 index === currentImageIndex ? "opacity-100" : "opacity-0 hidden"
               }`}
             >
-              <div>
-                <span className="">
-                  {imagePath.split("/").pop().split(".").slice(0, -1).join(".")}
-                </span>
-                <img
-                  src={imagePath}
-                  alt={`Image ${index}`}
-                  className="rounded-md border-[1px] border-gray-500 drop-shadow-md"
-                />
-              </div>
+              <h2>
+                {imagePath.split("/").pop().split(".").slice(0, -1).join(".")}
+              </h2>
+              <img
+                src={imagePath}
+                alt={`Image ${index}`}
+                className="rounded-md border-[1px] border-gray-500 drop-shadow-md"
+              />
             </div>
           ))}
         </div>
-        <button onClick={goToNextImage} className="w-64 h-64 ml-2 sm:ml-12">
+        <button
+          onClick={goToNextImage}
+          className="w-64 h-64 ml-2 sm:ml-12 hidden sm:block"
+        >
           <img
             src={imagePaths[nextImageIndex]}
             alt={`Image ${nextImageIndex}`}
@@ -84,11 +88,11 @@ export default function Slider({ imagePaths }: any) {
           />
         </button>
       </div>
-      <div className="bg-slate-300 pb-48 ">
-        <h2 className="text-xl text-center pb-8 pt-10 font-semibold">
+      <div className="bg-slate-300 sm:pb-32 pb-24">
+        <h2 className="text-xl w-3/5 mx-auto pb-10 pt-8 font-semibold">
           Découvrir mon travail :
         </h2>
-        <div className="flex w-2/3 gap-12 mx-auto justify-evenly">
+        <div className="flex w-4/5 sm:w-2/3 gap-2 mx-auto justify-evenly items-center flex-col sm:flex-row">
           <Card
             title="Mes dernières photos"
             href={"/photos"}
