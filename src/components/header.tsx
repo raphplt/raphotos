@@ -84,13 +84,6 @@ export default function Header() {
             Vidéos
           </Link>
           <Link
-            href={"/shop"}
-            className="hover:underline underline-offset-2"
-            // onClick={() => setShowMenu(false)}
-          >
-            Shop
-          </Link>
-          <Link
             href={"/a-propos"}
             className="hover:underline underline-offset-2"
             // onClick={() => setShowMenu(false)}
