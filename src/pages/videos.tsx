@@ -59,7 +59,7 @@ export default function Decouvrir() {
             <img src={button.src} alt="button" />
             <div className="flex gap-4">
               <button
-                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-5"
+                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-5 hover:bg-slate-500"
                 onClick={() => updateURL(url, 1)}
               >
                 <div
@@ -70,7 +70,7 @@ export default function Decouvrir() {
                 ></div>
               </button>
               <button
-                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-5"
+                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-5 hover:bg-slate-500"
                 onClick={() => updateURL(url, -1)}
               >
                 <div
