@@ -94,7 +94,7 @@ export default function Slider({ imagePaths }: any) {
         </button>
       </div>
       <div className="bg-slate-300 sm:pb-32 pb-24">
-        <h2 className="text-xl w-3/5 mx-auto pb-10 pt-8 font-semibold">
+        <h2 className="text-xl w-3/4 sm:w-3/5 mx-auto pb-10 pt-8 font-semibold">
           Découvrir mon travail :
         </h2>
         <div className="flex w-4/5 sm:w-2/3 gap-5 mx-auto justify-evenly items-center flex-col sm:flex-row">
