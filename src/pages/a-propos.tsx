@@ -5,7 +5,7 @@ import Metadata from "@/components/metadata";
 export default function APropos() {
   return (
     <div>
-      <Metadata />
+      <Metadata title="A propos" />
       <Header />
       <div className="mt-24 h-[100vh]">
         <h1 className="mt-28 text-2xl text-center bg-black text-white w-fit mx-auto px-24 py-1">

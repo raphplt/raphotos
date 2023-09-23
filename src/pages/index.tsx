@@ -42,7 +42,7 @@ export default function Slider({ imagePaths }: any) {
 
   return (
     <div>
-      <Metadata />
+      <Metadata title="Accueil" />
       <Header />
 
       <div className="flex justify-center items-center mt-20 mb-16">
