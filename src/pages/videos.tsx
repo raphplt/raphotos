@@ -29,7 +29,7 @@ export default function Decouvrir() {
 
   return (
     <div className="h-[100vh]">
-      <Metadata />
+      <Metadata title="Vidéos" />
       <Header />
       <h1 className="mt-28 text-2xl text-center  bg-black text-white w-fit mx-auto px-24 py-1">
         Vidéos

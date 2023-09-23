@@ -6,7 +6,7 @@ export default function SiteMap() {
   return (
     <div className="">
       <Header />
-      <Metadata />
+      <Metadata title="Sitemap" />
       <div className="w-1/2 mx-auto mt-36 text-lg gap-5 flex flex-col text-center h-[80vh]">
         <h1 className="font-semibold">Plan du site</h1>
         <h2>Accueil</h2>
