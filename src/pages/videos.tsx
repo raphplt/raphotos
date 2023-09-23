@@ -54,30 +54,30 @@ export default function Decouvrir() {
               className="old-tv-screen"
             ></iframe>
           </div>
-          <div className="bg-gray-300 w-[21%] h-[93%] rounded-lg flex items-center justify-center flex-col gap-20">
-            <img src={button.src} alt="button" />
-            <img src={button.src} alt="button" />
-            <div className="flex gap-4">
+          <div className="bg-gray-300 w-[21%] h-[93%] rounded-lg flex items-center justify-center flex-col gap-16">
+            <img src={button.src} alt="button" className="w-fit" />
+            <img src={button.src} alt="button" className="w-fit" />
+            <div className="flex gap-4 w-fit justify-center mx-auto sm:w-full">
               <button
-                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-5 hover:bg-slate-500"
+                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-3 hover:bg-slate-500"
                 onClick={() => updateURL(url, 1)}
               >
                 <div
                   className="w-0 h-0 
-                  border-t-[50px] border-t-transparent
-                  border-r-[75px] border-r-gray-900
-                  border-b-[50px] border-b-transparent"
+                  border-t-[37px] border-t-transparent
+                  border-r-[56px] border-r-gray-900
+                  border-b-[37px] border-b-transparent"
                 ></div>
               </button>
               <button
-                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-5 hover:bg-slate-500"
+                className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-3 hover:bg-slate-500"
                 onClick={() => updateURL(url, -1)}
               >
                 <div
                   className="w-0 h-0 
-                    border-t-[50px] border-t-transparent
-                    border-l-[75px] border-l-gray-900
-                    border-b-[50px] border-b-transparent"
+                  border-t-[37px] border-t-transparent
+                  border-l-[56px] border-l-gray-900
+                  border-b-[37px] border-b-transparent"
                 ></div>
               </button>
             </div>

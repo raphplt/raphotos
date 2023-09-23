@@ -11,7 +11,7 @@ export default function APropos() {
         <h1 className="mt-28 text-2xl text-center bg-black text-white w-fit mx-auto px-24 py-1">
           A propos
         </h1>
-        <p className="w-1/4 mx-auto mt-16">
+        <p className="w-1/4 mx-auto mt-16 text-justify">
           Bienvenue sur mon site web dédié à la photographie ! Je m&apos;appelle
           Raphaël, j&apos;ai 19 ans et je suis un passioné de photos depuis
           plusieurs années. Je photographie principalement des paysages, mais je
@@ -33,9 +33,9 @@ export default function APropos() {
           by NC (pas d&apos;utilisation commerciale).
           <br />
           <br />
-          Le site en est actuellement à sa version 2, en date du [...]. Si vous
-          remarquez un bug (hors ralentissement), ou que vous souhaitez discuter
-          de photo, vous pouvez me contacter sur mon instagram dédié
+          Le site en est actuellement à sa version 2, en date du 23/09/2023. Si
+          vous remarquez un bug (hors ralentissement), ou que vous souhaitez
+          discuter de photo, vous pouvez me contacter sur mon instagram dédié
           (@raph.otos).
           <br />
           <br />
@@ -46,7 +46,9 @@ export default function APropos() {
           <br />
           <br />
           <a
-            href="raph-portfolio.fr"
+            href="https://www.raph-portfolio.fr"
+            target="_blank"
+            rel="noreferrer"
             className="bg-slate-300 px-5 py-2 drop-shadow-md"
           >
             Mon portfolio
