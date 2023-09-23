@@ -39,14 +39,13 @@ export default function Decouvrir({ imagePaths }: any) {
                   <span className="my-1 font-semibold ml-6 group-hover/item:font-semibold">
                     {lastSubfolder}
                   </span>
-                  <div className="bg-black">
+                  <div className="bg-slate-600">
                     <Image
                       src={imagePath}
                       alt={`Image ${index}`}
                       className="group/img  sm:w-[30vw] hover:opacity-70 transition-opacity duration-200"
                       width={1000}
                       height={700}
-                      // placeholder="blur"
                     />
                   </div>
                 </Link>
