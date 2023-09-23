@@ -2,19 +2,23 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Metadata from "@/components/metadata";
-import Image from "next/image";
 import bg from "/public/assets/others/wood.jpg";
 import button from "/public/assets/others/button.png";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Decouvrir() {
   const [url, setUrl] = useState("https://www.youtube.com/embed/7LYEla1TJic");
+  const [windowSize, setWindowSize] = useState(0);
   const urls = [
     { url: "https://www.youtube.com/embed/7LYEla1TJic", id: 1 },
     { url: "https://www.youtube.com/embed/5h3zQvttngM", id: 2 },
   ];
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize(window.innerWidth);
+    }
+  }, []);
 
   const updateURL = (url: string, bool: number) => {
     const index = urls.findIndex((item) => item.url === url);
@@ -34,39 +38,79 @@ export default function Decouvrir() {
       <h1 className="mt-28 text-2xl text-center  bg-black text-white w-fit mx-auto px-24 py-1">
         Vidéos
       </h1>
-      <div
-        className="rounded-2xl w-[55%] h-[65%] mx-auto mt-20 mb-20 flex items-center justify-center"
-        style={{
-          backgroundImage: `url(${bg.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="bg-gray-900 w-[95%] h-[94%] flex items-center justify-center gap-5 rounded-xl">
-          <div className="bg-gray-300 w-[72%] h-[93%] rounded-lg flex  items-center justify-center">
+      {windowSize > 640 ? (
+        <div
+          className="rounded-2xl w-[55%] h-[65%] mx-auto mt-20 mb-20 flex items-center justify-center"
+          style={{
+            backgroundImage: `url(${bg.src})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="bg-gray-900 w-[95%] h-[94%] flex items-center justify-center gap-5 rounded-xl">
+            <div className="bg-gray-300 w-[72%] h-[93%] rounded-lg flex  items-center justify-center">
+              <iframe
+                width="560"
+                height="315"
+                src={url}
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="old-tv-screen"
+              ></iframe>
+            </div>
+            <div className="bg-gray-300 w-[21%] h-[93%] rounded-lg flex items-center justify-center flex-col gap-16">
+              <img src={button.src} alt="button" className="w-fit" />
+              <img src={button.src} alt="button" className="w-fit" />
+              <div className="flex gap-4 w-fit justify-center mx-auto sm:w-full">
+                <button
+                  className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-3 hover:bg-slate-500"
+                  onClick={() => updateURL(url, 1)}
+                >
+                  <div
+                    className="w-0 h-0 
+                  border-t-[37px] border-t-transparent
+                  border-r-[56px] border-r-gray-900
+                  border-b-[37px] border-b-transparent"
+                  ></div>
+                </button>
+                <button
+                  className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-3 hover:bg-slate-500"
+                  onClick={() => updateURL(url, -1)}
+                >
+                  <div
+                    className="w-0 h-0 
+                  border-t-[37px] border-t-transparent
+                  border-l-[56px] border-l-gray-900
+                  border-b-[37px] border-b-transparent"
+                  ></div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="w-11/12 mx-auto">
+          <div className="flex flex-col gap-10 mt-20">
             <iframe
-              width="560"
-              height="315"
+              width="100%"
+              height="200px"
               src={url}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-              className="old-tv-screen"
+              className="mx-auto"
             ></iframe>
-          </div>
-          <div className="bg-gray-300 w-[21%] h-[93%] rounded-lg flex items-center justify-center flex-col gap-16">
-            <img src={button.src} alt="button" className="w-fit" />
-            <img src={button.src} alt="button" className="w-fit" />
-            <div className="flex gap-4 w-fit justify-center mx-auto sm:w-full">
+            <div className="flex gap-4 w-fit justify-center mx-auto sm:w-full mb-24">
               <button
                 className="rounded-xl drop-shadow-sm bg-slate-400 py-2 px-3 hover:bg-slate-500"
                 onClick={() => updateURL(url, 1)}
               >
                 <div
                   className="w-0 h-0 
-                  border-t-[37px] border-t-transparent
-                  border-r-[56px] border-r-gray-900
-                  border-b-[37px] border-b-transparent"
+                  border-t-[26px] border-t-transparent
+                  border-r-[39px] border-r-gray-900
+                  border-b-[26px] border-b-transparent"
                 ></div>
               </button>
               <button
@@ -75,16 +119,15 @@ export default function Decouvrir() {
               >
                 <div
                   className="w-0 h-0 
-                  border-t-[37px] border-t-transparent
-                  border-l-[56px] border-l-gray-900
-                  border-b-[37px] border-b-transparent"
+                  border-t-[26px] border-t-transparent
+                  border-l-[39px] border-l-gray-900
+                  border-b-[26px] border-b-transparent"
                 ></div>
               </button>
             </div>
           </div>
         </div>
-      </div>
-
+      )}
       <Footer />
       <style jsx>
         {`
