@@ -18,10 +18,7 @@ export default function Header() {
 
   return (
     <header className="flex justify-center sm:flex-row flex-col gap-20 sm:gap-0 z-10 bg-white py-3 top-0 sm:justify-around sm:items-center w-[100vw] fixed ">
-      <div
-        className="flex justify-between w-11/12 mx-auto sm:w-fit sm:mx-0 
-       "
-      >
+      <div className="flex justify-between w-11/12 mx-auto sm:w-fit sm:mx-0">
         <Link
           href={"/"}
           className="hover:underline hover:font-semibold underline-offset-2 flex items-center flex-col gap-1"
@@ -33,7 +30,6 @@ export default function Header() {
             height={70}
             className="w-16 sm:w-20"
           />
-          {/* <h2 className="text-lg font-semibold">Raphotos</h2> */}
         </Link>
         <button
           className="flex flex-col h-12 w-12 rounded justify-center items-center group sm:hidden"

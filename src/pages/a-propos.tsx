@@ -7,11 +7,11 @@ export default function APropos() {
     <div>
       <Metadata title="A propos" />
       <Header />
-      <div className="mt-24 h-[100vh]">
+      <div className="mt-24 mb-12 sm:h-[100vh]">
         <h1 className="mt-28 text-2xl text-center bg-black text-white w-fit mx-auto px-24 py-1">
           A propos
         </h1>
-        <p className="w-1/4 mx-auto mt-16 text-justify">
+        <p className="w-2/3 sm:w-[30%] mx-auto mt-16 text-justify">
           Bienvenue sur mon site web dédié à la photographie ! Je m&apos;appelle
           Raphaël, j&apos;ai 19 ans et je suis un passioné de photos depuis
           plusieurs années. Je photographie principalement des paysages, mais je
@@ -49,7 +49,7 @@ export default function APropos() {
             href="https://www.raph-portfolio.fr"
             target="_blank"
             rel="noreferrer"
-            className="bg-slate-300 px-5 py-2 drop-shadow-md"
+            className="bg-slate-300 px-5 py-2 drop-shadow-md "
           >
             Mon portfolio
           </a>
