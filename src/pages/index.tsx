@@ -7,6 +7,7 @@ import path from "path";
 import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
 import Card from "@/components/card";
+import Image from "next/image";
 
 export default function Slider({ imagePaths }: any) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -50,10 +51,12 @@ export default function Slider({ imagePaths }: any) {
           onClick={goToPreviousImage}
           className="w-64 h-64 mr-2 sm:mr-12 hidden sm:block"
         >
-          <img
+          <Image
             src={imagePaths[prevImageIndex]}
             alt={`Image ${prevImageIndex}`}
             className="rounded-md border-[1px] border-gray-500 drop-shadow-md"
+            width={1000}
+            height={700}
           />
         </button>
         <div className="flex justify-center sm:justify-normal mx-auto sm:mx-0">
@@ -67,10 +70,12 @@ export default function Slider({ imagePaths }: any) {
               <h2>
                 {imagePath.split("/").pop().split(".").slice(0, -1).join(".")}
               </h2>
-              <img
+              <Image
                 src={imagePath}
                 alt={`Image ${index}`}
                 className="rounded-md border-[1px] border-gray-500 drop-shadow-md"
+                width={1000}
+                height={700}
               />
             </div>
           ))}
@@ -79,10 +84,12 @@ export default function Slider({ imagePaths }: any) {
           onClick={goToNextImage}
           className="w-64 h-64 ml-2 sm:ml-12 hidden sm:block"
         >
-          <img
+          <Image
             src={imagePaths[nextImageIndex]}
             alt={`Image ${nextImageIndex}`}
-            className="rounded-md border-[1px] border-gray-500 drop-shadow-md"
+            className="rounded-md border-[1px] border-gray-500  drop-shadow-md"
+            width={1000}
+            height={700}
           />
         </button>
       </div>
