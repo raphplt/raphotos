@@ -6,7 +6,7 @@ export default function MentionsLegales() {
   return (
     <div className="">
       <Header />
-      <Metadata />
+      <Metadata title="Mentions Légales" />
       <div className="max-w-2xl mx-auto bg-white p-4 rounded-lg shadow-md mt-24 mb-24">
         <h1 className="text-2xl font-bold mb-4">
           Mentions Légales de raphotos.fr

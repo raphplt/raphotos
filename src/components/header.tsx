@@ -24,7 +24,7 @@ export default function Header() {
       >
         <Link
           href={"/"}
-          className="hover:underline underline-offset-2 flex items-center flex-col gap-1"
+          className="hover:underline hover:font-semibold underline-offset-2 flex items-center flex-col gap-1"
         >
           <Image
             src={require("public/assets/logos/raphotos.png")}
@@ -64,28 +64,28 @@ export default function Header() {
         <div className="flex gap-20 text-xl sm:text-[16px] bg-white sm:gap-20 sm:flex-row flex-col h-[100vh] sm:h-fit w-[100wv] items-center sm:items-start">
           <Link
             href={"/"}
-            className="hover:underline underline-offset-2"
+            className="hover:underline hover:font-semibold  underline-offset-2"
             // onClick={() => setShowMenu(false)}
           >
             Accueil
           </Link>
           <Link
             href={"/photos"}
-            className="hover:underline underline-offset-2"
+            className="hover:underline hover:font-semibold  underline-offset-2"
             // onClick={() => setShowMenu(false)}
           >
             Photos
           </Link>
           <Link
             href={"/videos"}
-            className="hover:underline underline-offset-2"
+            className="hover:underline hover:font-semibold underline-offset-2"
             // onClick={() => setShowMenu(false)}
           >
             Vidéos
           </Link>
           <Link
             href={"/a-propos"}
-            className="hover:underline underline-offset-2"
+            className="hover:underline hover:font-semibold underline-offset-2"
             // onClick={() => setShowMenu(false)}
           >
             A propos

@@ -5,8 +5,6 @@ import Metadata from "@/components/metadata";
 import fs from "fs";
 import path from "path";
 import { useEffect, useState } from "react";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Footer from "@/components/footer";
 import Card from "@/components/card";
 
@@ -44,7 +42,7 @@ export default function Slider({ imagePaths }: any) {
 
   return (
     <div>
-      <Metadata />
+      <Metadata title="Accueil" />
       <Header />
 
       <div className="flex justify-center items-center mt-20 mb-16">
@@ -92,7 +90,7 @@ export default function Slider({ imagePaths }: any) {
         <h2 className="text-xl w-3/5 mx-auto pb-10 pt-8 font-semibold">
           Découvrir mon travail :
         </h2>
-        <div className="flex w-4/5 sm:w-2/3 gap-2 mx-auto justify-evenly items-center flex-col sm:flex-row">
+        <div className="flex w-4/5 sm:w-2/3 gap-5 mx-auto justify-evenly items-center flex-col sm:flex-row">
           <Card
             title="Mes dernières photos"
             href={"/photos"}

@@ -23,12 +23,6 @@ export default function Decouvrir({ directoryName, imagePaths }: any) {
   const [showImages, setShowImages] = useState(false);
   const [imageLoaded, setImageLoaded] = useState<boolean[]>([]);
 
-  const graySquareStyle = {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#ccc",
-  };
-
   const openImage = (imagePath: any) => {
     setSelectedImage(imagePath);
   };
@@ -80,7 +74,7 @@ export default function Decouvrir({ directoryName, imagePaths }: any) {
   }, [inView]);
   return (
     <div>
-      <Metadata />
+      <Metadata title={directoryName} />
       <Header />
       <a
         className={`py-3 px-3 w-10 bg-emerald-200 rounded-full z-20  h-10 fixed bottom-2 right-2 flex items-center justify-center ${
