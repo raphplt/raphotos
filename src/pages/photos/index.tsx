@@ -10,7 +10,7 @@ import Footer from "@/components/footer";
 export default function Decouvrir({ imagePaths }: any) {
   return (
     <div>
-      <Metadata />
+      <Metadata title="Photos" />
       <Header />
       <div className="sm:w-10/12 w-full mx-auto mb-24">
         <h1 className="mt-28 text-2xl text-center bg-black text-white w-fit mx-auto px-24 py-1">
