@@ -44,8 +44,8 @@ export default function Decouvrir({ imagePaths }: any) {
                       src={imagePath}
                       alt={`Image ${index}`}
                       className="group/img  sm:w-[30vw] hover:opacity-70 transition-opacity duration-200"
-                      width={1000}
-                      height={700}
+                      width={1080}
+                      height={720}
                       // placeholder="blur"
                     />
                   </div>
