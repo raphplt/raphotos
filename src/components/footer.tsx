@@ -43,10 +43,10 @@ export default function Footer() {
                 <Link href="/mentions-legales">Mentions légales</Link>
               </li>
               <li className="transform hover:translate-x-2 transition-transform duration-300">
-                <Link href="/decouvrir">Confidentialité</Link>
+                <Link href="/cookies">Cookies</Link>
               </li>
               <li className="transform hover:translate-x-2 transition-transform duration-300">
-                <Link href="/decouvrir">Ventes et remboursement</Link>
+                <Link href="/changelog">Changelog</Link>
               </li>
             </ul>
             <ul className="list-disc pl-3"></ul>
