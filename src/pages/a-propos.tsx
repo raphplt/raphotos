@@ -53,14 +53,24 @@ export default function APropos() {
           Mes autres sites internet :
           <br />
           <br />
-          <a
-            href="https://www.raph-portfolio.fr"
-            target="_blank"
-            rel="noreferrer"
-            className="bg-slate-300 px-5 py-2 drop-shadow-md "
-          >
-            Mon portfolio
-          </a>
+          <div className="flex flex-col gap-5 mx-auto">
+            <a
+              href="https://www.raph-portfolio.fr"
+              target="_blank"
+              rel="noreferrer"
+              className="bg-slate-300 px-5 py-2 drop-shadow-md text-center  hover:bg-slate-400"
+            >
+              Mon portfolio
+            </a>
+            <a
+              href="https://pokelab-fr.vercel.app"
+              target="_blank"
+              rel="noreferrer"
+              className="bg-slate-300 px-5 py-2 drop-shadow-md text-center hover:bg-slate-400"
+            >
+              Pokélab
+            </a>
+          </div>
         </p>
       </div>
       <Footer />
