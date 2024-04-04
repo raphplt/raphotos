@@ -119,12 +119,12 @@ export default function Slider({ imagePaths }: any) {
 					<Card
 						title="Mes dernières photos"
 						href={"/photos"}
-						img="/assets/pictures/Summer_2023/DSC05825-min.jpg"
+						img="/assets/pictures/Summer_2023/DSC05825-min.webp"
 					/>
 					<Card
 						title="Mes dernières vidéos"
 						href={"/videos"}
-						img="/assets/pictures/Summer_2023/DSC06294-min.jpg"
+						img="/assets/pictures/Summer_2023/DSC06294-min.webp"
 					/>
 					<Card
 						title="A propos de moi"
