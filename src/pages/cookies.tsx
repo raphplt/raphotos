@@ -5,7 +5,7 @@ import Metadata from "@/components/metadata";
 export default function Cookies() {
   return (
     <div>
-      <Metadata title="Cookies" />
+      <Metadata title="Cookies" description="Politique relative aux cookies" />
       <Header />
       <div className="w-2/3  mt-36 text-center mx-auto mb-12">
         <h1 className="text-xl mb-4 mt-6">Politique relative aux cookies</h1>
