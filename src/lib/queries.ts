@@ -13,7 +13,7 @@ import type {
 const PHOTO_COLUMNS =
 	"id, slug, album_id, width, height, lqip, title, caption, original_ext, taken_at, camera, lens, iso, aperture, shutter_speed, focal_length, gps_lat, gps_lng, file_hash, published, sort_order, created_at";
 
-const PHOTO_FIELDS = `${PHOTO_COLUMNS}, albums(slug)`;
+const PHOTO_FIELDS = `${PHOTO_COLUMNS}, albums!photos_album_id_fkey(slug)`;
 
 type StatsRow = { photo_id: string; like_count: number; comment_count: number };
 
@@ -180,7 +180,7 @@ export async function getAllPhotoSlugs(): Promise<
 	if (!isSupabaseConfigured) return [];
 	const { data } = await supabasePublic
 		.from("photos")
-		.select("slug, albums(slug)")
+		.select("slug, albums!photos_album_id_fkey(slug)")
 		.eq("published", true);
 
 	type Row = { slug: string; albums: { slug: string } | { slug: string }[] | null };

@@ -15,7 +15,7 @@ export async function getAdminPhotos(options?: {
 	const supabase = createSupabaseAdminClient();
 	let query = supabase
 		.from("photos")
-		.select("*, albums(title)")
+		.select("*, albums!photos_album_id_fkey(title)")
 		.order("created_at", { ascending: false })
 		.limit(options?.limit ?? 500);
 
