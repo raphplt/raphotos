@@ -13,7 +13,7 @@ export default async function HomePage() {
 
 	return (
 		<>
-			{/* ---------------------------------------------------------- hero */}
+
 			<section className="relative flex min-h-dvh items-end overflow-hidden">
 				{hero ? (
 					<>
@@ -67,7 +67,6 @@ export default async function HomePage() {
 				)}
 			</section>
 
-			{/* ------------------------------------------------------- dernières */}
 			{latest.length > 1 && (
 				<section className="mx-auto max-w-[1600px] px-5 py-24 sm:px-10 sm:py-32">
 					<div className="flex items-end justify-between gap-6">
@@ -113,7 +112,6 @@ export default async function HomePage() {
 				</section>
 			)}
 
-			{/* ---------------------------------------------------------- albums */}
 			{albums.length > 0 && (
 				<section className="mx-auto max-w-[1600px] px-5 pb-24 sm:px-10 sm:pb-32">
 					<h2 className="text-[11px] tracking-editorial text-faint">

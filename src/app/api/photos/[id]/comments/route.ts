@@ -8,7 +8,7 @@ import { getIpHash } from "@/lib/visitor";
 const commentSchema = z.object({
 	author_name: z.string().trim().min(2).max(40),
 	body: z.string().trim().min(2).max(1000),
-	/** Champ leurre : rempli uniquement par les robots. */
+
 	website: z.string().max(0).optional().or(z.literal("")),
 });
 
@@ -30,7 +30,6 @@ export async function POST(
 		);
 	}
 
-	// Honeypot rempli : on répond comme si tout s'était bien passé, sans écrire.
 	if (parsed.data.website) {
 		return NextResponse.json({ status: "pending" });
 	}
@@ -46,7 +45,6 @@ export async function POST(
 
 	const supabase = createSupabaseAdminClient();
 
-	// La photo doit exister et être publiée.
 	const { data: photo } = await supabase
 		.from("photos")
 		.select("id")

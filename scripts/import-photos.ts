@@ -1,25 +1,3 @@
-/**
- * Pipeline d'ingestion des photos.
- *
- *   npm run import -- <dossier> [options]
- *
- * Pour chaque image trouvée :
- *   1. lecture des EXIF (boîtier, objectif, réglages, date, GPS)
- *   2. génération des variantes AVIF (thumb / grid / full) + LQIP
- *   3. upload des variantes et de l'original sur Cloudflare R2
- *   4. insertion ou mise à jour de la ligne dans Supabase
- *
- * Idempotent : l'empreinte SHA-256 du fichier sert de clé de déduplication,
- * le script peut donc être relancé sans créer de doublon.
- *
- * Options :
- *   --album <nom>   nom de l'album (défaut : nom du dossier)
- *   --dry-run       n'écrit rien, affiche seulement ce qui serait fait
- *   --force         régénère et réuploade même si la photo existe déjà
- *   --recursive     traite les sous-dossiers comme autant d'albums
- *   --concurrency N traitements simultanés (défaut : 4)
- */
-
 import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import { basename, extname, join, resolve } from "node:path";
@@ -41,8 +19,6 @@ import { formatAlbumTitle, slugify } from "../src/lib/utils";
 
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"]);
 
-// --------------------------------------------------------------- arguments
-
 const { values, positionals } = parseArgs({
 	allowPositionals: true,
 	options: {
@@ -63,8 +39,6 @@ if (!sourceDir) {
 const dryRun = values["dry-run"];
 const force = values.force;
 const concurrency = Number(values.concurrency) || 4;
-
-// ------------------------------------------------------------ environnement
 
 function requireEnv(name: string): string {
 	const value = process.env[name];
@@ -95,8 +69,6 @@ const r2 = dryRun
 		});
 
 const bucket = process.env.R2_BUCKET ?? "raphotos";
-
-// ------------------------------------------------------------------ helpers
 
 interface ExifData {
 	takenAt: string | null;
@@ -163,13 +135,12 @@ async function upload(key: string, body: Buffer, contentType: string) {
 		Key: key,
 		Body: body,
 		ContentType: contentType,
-		// Les clés sont immuables (slug dérivé du contenu) : cache maximal.
+
 		CacheControl: "public, max-age=31536000, immutable",
 	};
 	await r2.send(new PutObjectCommand(params));
 }
 
-/** Placeholder flou de 20px encodé en data-URI, affiché pendant le chargement. */
 async function makeLqip(pipeline: Sharp): Promise<string> {
 	const buffer = await pipeline
 		.clone()
@@ -178,8 +149,6 @@ async function makeLqip(pipeline: Sharp): Promise<string> {
 		.toBuffer();
 	return `data:image/webp;base64,${buffer.toString("base64")}`;
 }
-
-// -------------------------------------------------------------- traitement
 
 interface ImportStats {
 	imported: number;
@@ -199,7 +168,6 @@ async function processPhoto(
 	const buffer = await readFile(filePath);
 	const fileHash = createHash("sha256").update(buffer).digest("hex");
 
-	// Déduplication : même contenu binaire = même photo, quel que soit le nom.
 	if (supabase && !force) {
 		const { data: existing } = await supabase
 			.from("photos")
@@ -225,7 +193,6 @@ async function processPhoto(
 
 	const [exif, lqip] = await Promise.all([readExif(filePath), makeLqip(pipeline)]);
 
-	// Variantes AVIF. `withoutEnlargement` évite d'upscaler les petits fichiers.
 	let uploadedBytes = 0;
 	for (const [name, config] of Object.entries(IMAGE_VARIANTS)) {
 		const variant = await pipeline
@@ -237,7 +204,6 @@ async function processPhoto(
 		uploadedBytes += variant.length;
 	}
 
-	// Original conservé pour le téléchargement (licence CC BY-NC).
 	await upload(
 		`photos/${slug}/original.${originalExt}`,
 		buffer,
@@ -354,7 +320,7 @@ async function main() {
 	if (values.recursive) {
 		const entries = await readdir(root, { withFileTypes: true });
 		const folders = entries.filter((e) => e.isDirectory()).map((e) => join(root, e.name));
-		// Le dossier racine peut lui-même contenir des images.
+
 		await importFolder(root);
 		for (const folder of folders.sort()) {
 			await importFolder(folder);

@@ -3,12 +3,6 @@ import "server-only";
 import { createSupabaseAdminClient } from "./supabase/server";
 import type { Album, Comment, Photo, Video } from "./types";
 
-/**
- * Requêtes de l'espace d'administration. Contrairement à `queries.ts`, elles
- * utilisent la clé service et voient donc aussi les brouillons et les
- * commentaires en attente. Réservées aux pages protégées par `requireAdmin()`.
- */
-
 export interface AdminPhoto extends Photo {
 	album_title: string | null;
 }

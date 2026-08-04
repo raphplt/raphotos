@@ -13,12 +13,10 @@ import type {
 const PHOTO_COLUMNS =
 	"id, slug, album_id, width, height, lqip, title, caption, original_ext, taken_at, camera, lens, iso, aperture, shutter_speed, focal_length, gps_lat, gps_lng, file_hash, published, sort_order, created_at";
 
-/** Colonnes de la photo + slug de l'album parent (pour construire les URLs). */
 const PHOTO_FIELDS = `${PHOTO_COLUMNS}, albums(slug)`;
 
 type StatsRow = { photo_id: string; like_count: number; comment_count: number };
 
-/** Ligne brute renvoyée par PostgREST : la relation peut arriver en objet ou en tableau. */
 type PhotoRow = Photo & { albums?: { slug: string } | { slug: string }[] | null };
 
 function albumSlugOf(row: PhotoRow): string | null {
@@ -26,7 +24,6 @@ function albumSlugOf(row: PhotoRow): string | null {
 	return album?.slug ?? null;
 }
 
-/** Rattache les compteurs à une liste de photos en une seule requête. */
 async function attachStats(rows: PhotoRow[]): Promise<PhotoWithStats[]> {
 	if (rows.length === 0) return [];
 
@@ -64,8 +61,6 @@ export async function getAlbums(): Promise<AlbumWithCover[]> {
 
 	if (!albums?.length) return [];
 
-	// Toutes les photos publiées des albums concernés, en une requête : sert à
-	// la fois au comptage et au repli de couverture.
 	const { data: photos } = await supabasePublic
 		.from("photos")
 		.select("id, album_id, slug, width, height, lqip, taken_at, sort_order")
@@ -142,7 +137,6 @@ export async function getPhotoBySlug(slug: string): Promise<PhotoWithStats | nul
 	return withStats ?? null;
 }
 
-/** Dernières photos publiées, tous albums confondus. */
 export async function getLatestPhotos(limit = 12): Promise<PhotoWithStats[]> {
 	if (!isSupabaseConfigured) return [];
 	const { data } = await supabasePublic
@@ -156,7 +150,6 @@ export async function getLatestPhotos(limit = 12): Promise<PhotoWithStats[]> {
 	return attachStats((data as unknown as PhotoRow[] | null) ?? []);
 }
 
-/** Photos les plus aimées — alimente la sélection de la page d'accueil. */
 export async function getMostLikedPhotos(limit = 6): Promise<PhotoWithStats[]> {
 	if (!isSupabaseConfigured) return [];
 	const { data: stats } = await supabasePublic

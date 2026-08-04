@@ -1,7 +1,3 @@
-/**
- * lucide-react a retiré les icônes de marque à partir de la v1 ; on redessine
- * donc le glyphe Instagram, calé sur la même grille 24 et le même trait.
- */
 export default function InstagramIcon({ size = 16 }: { size?: number }) {
 	return (
 		<svg

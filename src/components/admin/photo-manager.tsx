@@ -24,7 +24,6 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 	const [items, setItems] = useState(photos);
 	const [, startTransition] = useTransition();
 
-	// Reflet immédiat des bascules publié/brouillon, avant la réponse serveur.
 	const [optimisticItems, applyOptimistic] = useOptimistic(
 		items,
 		(state: AdminPhoto[], update: { id: string; published: boolean }) =>
@@ -90,7 +89,6 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 							)}
 						</div>
 
-						{/* Actions, révélées au survol */}
 						<div className="absolute inset-x-0 bottom-0 flex justify-center gap-1 bg-gradient-to-t from-ink to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
 							<button
 								type="button"

@@ -5,10 +5,6 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
-/**
- * L'espace d'administration ne reprend pas l'en-tête public : il occupe
- * l'écran entier et impose un décalage haut nul.
- */
 export default function AdminLayout({
 	children,
 }: {

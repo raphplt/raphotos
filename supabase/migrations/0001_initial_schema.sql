@@ -1,9 +1,4 @@
--- Raphotos — schéma initial
--- Albums, photos, likes, commentaires modérés et vidéos.
-
 create extension if not exists "pgcrypto";
-
--- ---------------------------------------------------------------- albums
 
 create table if not exists public.albums (
 	id             uuid primary key default gen_random_uuid(),
@@ -18,8 +13,6 @@ create table if not exists public.albums (
 	created_at     timestamptz not null default now(),
 	updated_at     timestamptz not null default now()
 );
-
--- ---------------------------------------------------------------- photos
 
 create table if not exists public.photos (
 	id            uuid primary key default gen_random_uuid(),
@@ -58,8 +51,6 @@ alter table public.albums
 	add constraint albums_cover_photo_fk
 	foreign key (cover_photo_id) references public.photos(id) on delete set null;
 
--- ---------------------------------------------------------------- likes
-
 create table if not exists public.likes (
 	id         uuid primary key default gen_random_uuid(),
 	photo_id   uuid not null references public.photos(id) on delete cascade,
@@ -69,8 +60,6 @@ create table if not exists public.likes (
 );
 
 create index if not exists likes_photo_idx on public.likes (photo_id);
-
--- ------------------------------------------------------------- commentaires
 
 do $$ begin
 	create type public.comment_status as enum ('pending', 'approved', 'rejected');
@@ -92,8 +81,6 @@ create index if not exists comments_photo_status_idx
 create index if not exists comments_moderation_idx
 	on public.comments (status, created_at desc);
 
--- ---------------------------------------------------------------- vidéos
-
 create table if not exists public.videos (
 	id          uuid primary key default gen_random_uuid(),
 	youtube_id  text not null unique,
@@ -104,11 +91,6 @@ create table if not exists public.videos (
 	created_at  timestamptz not null default now()
 );
 
--- ------------------------------------------------------- compteurs agrégés
-
--- Évite un N+1 sur les grilles : une seule jointure pour likes + commentaires.
--- security_invoker : sans cette option la vue s'exécuterait avec les droits de
--- son propriétaire et contournerait silencieusement les politiques RLS.
 create or replace view public.photo_stats
 with (security_invoker = on) as
 select
@@ -125,8 +107,6 @@ left join (
 	from public.comments where status = 'approved' group by photo_id
 ) c on c.photo_id = p.id;
 
--- --------------------------------------------------- mise à jour updated_at
-
 create or replace function public.touch_updated_at()
 returns trigger language plpgsql as $$
 begin
@@ -141,11 +121,6 @@ create trigger albums_touch before update on public.albums
 drop trigger if exists photos_touch on public.photos;
 create trigger photos_touch before update on public.photos
 	for each row execute function public.touch_updated_at();
-
--- ------------------------------------------------------------------- RLS
--- Lecture publique limitée au contenu publié. Toutes les écritures passent
--- par le serveur avec la clé service, qui contourne RLS : aucune politique
--- d'insertion n'est donc exposée au client anonyme.
 
 alter table public.albums   enable row level security;
 alter table public.photos   enable row level security;

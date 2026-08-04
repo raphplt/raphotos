@@ -38,11 +38,10 @@ export interface Photo {
 	created_at: string;
 }
 
-/** Photo enrichie des compteurs issus de la vue `photo_stats`. */
 export interface PhotoWithStats extends Photo {
 	like_count: number;
 	comment_count: number;
-	/** Slug de l'album parent, nécessaire pour construire l'URL de la photo. */
+
 	album_slug: string | null;
 }
 

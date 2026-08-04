@@ -84,7 +84,6 @@ export default function Header() {
 				</button>
 			</div>
 
-			{/* Panneau mobile : superposition plein écran, fermée à la navigation */}
 			<div
 				className={cn(
 					"fixed inset-0 top-16 bg-ink transition-all duration-300 sm:hidden",
@@ -98,8 +97,7 @@ export default function Header() {
 						<Link
 							key={link.href}
 							href={link.href}
-							// Referme le panneau à la navigation, sans quoi il resterait
-							// ouvert par-dessus la nouvelle page.
+
 							onClick={() => setOpen(false)}
 							className="border-b border-line/60 py-5 font-display text-3xl text-paper"
 							style={{ transitionDelay: `${index * 60}ms` }}

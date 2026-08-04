@@ -1,13 +1,5 @@
 import "server-only";
 
-/**
- * Limiteur de débit en mémoire.
- *
- * Suffisant ici : le trafic d'un portfolio est modeste et la contrainte
- * d'unicité en base reste le vrai garde-fou contre les doublons. Sur du
- * serverless, chaque instance a son propre compteur — c'est un filtre
- * anti-abus, pas une garantie stricte.
- */
 const buckets = new Map<string, { count: number; resetAt: number }>();
 
 export interface RateLimitResult {
@@ -29,7 +21,6 @@ export function rateLimit(
 		return { allowed: true, remaining: limit - 1, retryAfterSeconds: 0 };
 	}
 
-	// Purge opportuniste pour éviter que la map ne croisse indéfiniment.
 	if (buckets.size > 5000) {
 		for (const [k, v] of buckets) {
 			if (now > v.resetAt) buckets.delete(k);

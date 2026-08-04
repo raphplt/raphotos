@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-/* ------------------------------------------------------------------
-   Design system — éditorial sombre.
-   La photo est la seule source de couleur : l'interface reste
-   achromatique, l'accent n'est utilisé que pour les états interactifs.
-   ------------------------------------------------------------------ */
 @theme {
 	--color-ink: #0a0a0a;
 	--color-ink-soft: #121212;
@@ -69,7 +64,6 @@
 		border-radius: 2px;
 	}
 
-	/* Barre de défilement discrète, cohérente avec le fond sombre */
 	::-webkit-scrollbar {
 		width: 10px;
 		height: 10px;
@@ -88,7 +82,6 @@
 }
 
 @layer utilities {
-	/* Grille masonry en colonnes CSS : préserve le ratio natif, aucun recadrage */
 	.masonry {
 		column-gap: var(--masonry-gap, 1rem);
 	}
@@ -97,7 +90,6 @@
 		margin-bottom: var(--masonry-gap, 1rem);
 	}
 
-	/* Lettrage éditorial des titres de section */
 	.tracking-editorial {
 		letter-spacing: 0.22em;
 		text-transform: uppercase;
@@ -107,7 +99,6 @@
 		text-wrap: balance;
 	}
 
-	/* Révélation au scroll, pilotée par IntersectionObserver */
 	.reveal {
 		opacity: 0;
 		transform: translateY(14px);

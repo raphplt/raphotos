@@ -1,10 +1,5 @@
 import type { NextConfig } from "next";
 
-/**
- * Le CDN R2 sert des variantes déjà générées (voir scripts/import-photos.ts).
- * `loaderFile` court-circuite l'optimiseur d'images Vercel : aucune
- * transformation n'est facturée, on pointe directement la bonne variante.
- */
 const cdnHost = process.env.NEXT_PUBLIC_CDN_URL
 	? new URL(process.env.NEXT_PUBLIC_CDN_URL).hostname
 	: "cdn.raphotos.fr";

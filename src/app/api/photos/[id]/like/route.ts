@@ -35,7 +35,6 @@ export async function POST(
 	const supabase = createSupabaseAdminClient();
 
 	if (parsed.data.liked) {
-		// onConflict : rejouer un like déjà posé est sans effet.
 		const { error } = await supabase
 			.from("likes")
 			.upsert(

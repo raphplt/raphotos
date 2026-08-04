@@ -13,7 +13,6 @@ const SEASON_LABELS: Record<string, string> = {
 	Winter: "Hiver",
 };
 
-/** « Summer_2023 » → « Été 2023 ». Retombe sur le nom brut si non reconnu. */
 export function formatAlbumTitle(folderName: string): string {
 	const [season, year] = folderName.split("_");
 	if (!season) return folderName;
@@ -56,7 +55,6 @@ export function formatRelativeDate(value: string | Date): string {
 	return formatDate(date);
 }
 
-/** « 1/250 » à partir d'une vitesse d'obturation en secondes. */
 export function formatShutterSpeed(seconds: number | null): string {
 	if (!seconds) return "";
 	if (seconds >= 1) return `${Number(seconds.toFixed(1))}s`;

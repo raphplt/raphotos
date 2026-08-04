@@ -6,23 +6,14 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
-/**
- * Toutes les actions revérifient l'identité (requireAdmin) avant d'écrire :
- * une Server Action est une route HTTP publique, le middleware seul ne suffit
- * pas à la protéger.
- */
-
 const uuid = z.uuid();
 
-/** Rafraîchit les pages publiques impactées par une modification de contenu. */
 function revalidatePublicPages() {
 	revalidatePath("/", "page");
 	revalidatePath("/photos", "page");
 	revalidatePath("/photos/[album]", "page");
 	revalidatePath("/videos", "page");
 }
-
-// ------------------------------------------------------------------ photos
 
 export async function setPhotoPublished(photoId: string, published: boolean) {
 	await requireAdmin();
@@ -86,8 +77,7 @@ export async function deletePhoto(photoId: string) {
 	if (!uuid.safeParse(photoId).success) return { error: "Photo inconnue" };
 
 	const supabase = createSupabaseAdminClient();
-	// Les objets restent sur R2 : le stockage est gratuit à cette échelle et
-	// cela laisse une porte de sortie en cas de suppression accidentelle.
+
 	const { error } = await supabase.from("photos").delete().eq("id", photoId);
 
 	if (error) return { error: error.message };
@@ -95,8 +85,6 @@ export async function deletePhoto(photoId: string) {
 	revalidatePath("/admin/photos");
 	return { success: true };
 }
-
-// ------------------------------------------------------------------ albums
 
 const albumSchema = z.object({
 	title: z.string().trim().min(1).max(80),
@@ -145,8 +133,6 @@ export async function setAlbumCover(albumId: string, photoId: string) {
 	return { success: true };
 }
 
-// ------------------------------------------------------------ commentaires
-
 export async function moderateComment(
 	commentId: string,
 	status: "approved" | "rejected",
@@ -179,8 +165,6 @@ export async function deleteComment(commentId: string) {
 	return { success: true };
 }
 
-// ------------------------------------------------------------------ vidéos
-
 const videoSchema = z.object({
 	youtube_id: z
 		.string()
@@ -190,7 +174,6 @@ const videoSchema = z.object({
 	description: z.string().trim().max(600).nullable(),
 });
 
-/** Accepte un identifiant brut ou une URL YouTube complète. */
 function extractYoutubeId(input: string): string {
 	const trimmed = input.trim();
 	const match = trimmed.match(

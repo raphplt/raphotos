@@ -15,11 +15,6 @@ interface PhotoImageProps {
 	className?: string;
 }
 
-/**
- * Image de galerie. Le `src` pointe une variante précise du CDN ; le loader
- * (src/lib/image-loader.ts) ajuste ensuite la variante selon la largeur
- * réellement demandée par le navigateur.
- */
 export default function PhotoImage({
 	slug,
 	width,

@@ -25,7 +25,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
 				return;
 			}
 			formRef.current?.reset();
-			// La liste est rechargée côté serveur par la revalidation.
+
 			window.location.reload();
 		});
 	}

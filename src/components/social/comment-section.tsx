@@ -90,7 +90,6 @@ export default function CommentSection({
 						className="resize-none border-b border-line bg-transparent py-2 text-sm text-paper outline-none transition-colors placeholder:text-faint focus:border-accent"
 					/>
 
-					{/* Leurre anti-robot : masqué visuellement et au lecteur d'écran. */}
 					<input
 						type="text"
 						name="website"

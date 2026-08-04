@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
 			email,
 			options: {
 				emailRedirectTo: `${window.location.origin}/admin/callback`,
-				// Personne d'autre ne doit pouvoir se créer un accès.
+
 				shouldCreateUser: false,
 			},
 		});

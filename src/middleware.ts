@@ -1,14 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-/**
- * Rafraîchit la session Supabase et verrouille l'espace d'administration.
- *
- * Deux conditions doivent être réunies pour accéder à /admin : être
- * authentifié, et être l'adresse déclarée dans ADMIN_EMAIL. Le contrôle est
- * répété côté page et côté action — le middleware n'est que la première
- * barrière.
- */
 export async function middleware(request: NextRequest) {
 	let response = NextResponse.next({ request });
 

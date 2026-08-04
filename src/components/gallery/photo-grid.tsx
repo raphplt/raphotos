@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 interface PhotoGridProps {
 	photos: PhotoWithStats[];
-	/** Nombre affiché initialement ; le reste se charge au défilement. */
+
 	initialCount?: number;
 }
 
@@ -26,7 +26,6 @@ export default function PhotoGrid({
 	const [openIndex, setOpenIndex] = useState<number | null>(null);
 	const sentinelRef = useRef<HTMLDivElement>(null);
 
-	// Chargement progressif : on ajoute un lot dès que la sentinelle approche.
 	useEffect(() => {
 		const sentinel = sentinelRef.current;
 		if (!sentinel || visibleCount >= photos.length) return;
@@ -72,7 +71,6 @@ export default function PhotoGrid({
 							className="transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03] group-hover:brightness-110"
 						/>
 
-						{/* Voile d'information, révélé au survol */}
 						<div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-ink/80 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100">
 							<div className="flex w-full items-end justify-between gap-3 p-4">
 								<span className="font-display text-base leading-tight text-paper">

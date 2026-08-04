@@ -5,11 +5,6 @@ import { cookies } from "next/headers";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-/**
- * Client lié à la session de l'utilisateur (cookies). À utiliser dans les
- * Server Components et Route Handlers : les politiques RLS s'appliquent, donc
- * seul le contenu publié est visible pour un visiteur anonyme.
- */
 export async function createSupabaseServerClient() {
 	const cookieStore = await cookies();
 
@@ -23,21 +18,12 @@ export async function createSupabaseServerClient() {
 					for (const { name, value, options } of cookiesToSet) {
 						cookieStore.set(name, value, options);
 					}
-				} catch {
-					// Appelé depuis un Server Component : le rafraîchissement de
-					// session est pris en charge par le middleware, on ignore.
-				}
+				} catch {}
 			},
 		},
 	});
 }
 
-/**
- * Client à privilèges élevés (clé service). Contourne RLS.
- *
- * Réservé aux écritures serveur maîtrisées : likes, dépôt de commentaires,
- * actions d'administration. Ne jamais l'exposer côté client.
- */
 export function createSupabaseAdminClient() {
 	const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 	if (!serviceKey) {

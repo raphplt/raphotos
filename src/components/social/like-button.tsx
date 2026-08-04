@@ -7,14 +7,6 @@ import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "raphotos:likes";
 
-/**
- * Mémoire locale des photos aimées.
- *
- * Le cookie visiteur qui fait autorité est `httpOnly` : le client ne peut donc
- * pas déduire son propre état. On garde ici un miroir purement visuel — le
- * décompte, lui, vient toujours du serveur, où la contrainte d'unicité
- * (photo_id, visitor_id) empêche tout double comptage.
- */
 function readLocalLikes(): Set<string> {
 	if (typeof window === "undefined") return new Set();
 	try {
@@ -25,7 +17,6 @@ function readLocalLikes(): Set<string> {
 	}
 }
 
-/** Abonnés locaux : `storage` ne se déclenche que dans les *autres* onglets. */
 const listeners = new Set<() => void>();
 
 function subscribeLocalLikes(listener: () => void) {
@@ -40,9 +31,7 @@ function subscribeLocalLikes(listener: () => void) {
 function writeLocalLikes(likes: Set<string>) {
 	try {
 		window.localStorage.setItem(STORAGE_KEY, JSON.stringify([...likes]));
-	} catch {
-		// Stockage indisponible (navigation privée) : sans conséquence.
-	}
+	} catch {}
 	for (const listener of listeners) listener();
 }
 
@@ -60,9 +49,6 @@ export default function LikeButton({
 	const [count, setCount] = useState(initialCount);
 	const [isPending, startTransition] = useTransition();
 
-	// Le stockage local est un système externe : useSyncExternalStore le lit
-	// sans effet ni setState au montage, et gère proprement le rendu serveur
-	// (où l'état vaut toujours « non aimé »).
 	const liked = useSyncExternalStore(
 		subscribeLocalLikes,
 		useCallback(() => readLocalLikes().has(photoId), [photoId]),
@@ -72,8 +58,6 @@ export default function LikeButton({
 	function toggle() {
 		const nextLiked = !liked;
 
-		// Optimistic UI : on applique tout de suite, on corrige si le serveur
-		// répond autre chose.
 		setCount((c) => c + (nextLiked ? 1 : -1));
 
 		const likes = readLocalLikes();
@@ -93,13 +77,11 @@ export default function LikeButton({
 				const data = (await response.json()) as { liked: boolean; count: number };
 				setCount(data.count);
 
-				// Le serveur fait foi : on aligne le miroir local sur sa réponse.
 				const synced = readLocalLikes();
 				if (data.liked) synced.add(photoId);
 				else synced.delete(photoId);
 				writeLocalLikes(synced);
 			} catch {
-				// Retour à l'état antérieur
 				setCount((c) => c + (nextLiked ? -1 : 1));
 				const reverted = readLocalLikes();
 				if (nextLiked) reverted.delete(photoId);

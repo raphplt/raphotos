@@ -45,7 +45,6 @@ export default function Lightbox({
 		[index, photos.length, onNavigate],
 	);
 
-	// Navigation clavier
 	useEffect(() => {
 		const onKey = (event: KeyboardEvent) => {
 			switch (event.key) {
@@ -72,8 +71,6 @@ export default function Lightbox({
 		return () => window.removeEventListener("keydown", onKey);
 	}, [previous, next, onClose]);
 
-	// Précharge les voisines immédiates pour que la navigation paraisse
-	// instantanée. On vise la variante `full`, celle qu'affichera la lightbox.
 	useEffect(() => {
 		if (photos.length < 2) return;
 		const targets = [
@@ -87,7 +84,6 @@ export default function Lightbox({
 		}
 	}, [index, photos]);
 
-	// Verrouille le défilement de la page pendant l'ouverture
 	useEffect(() => {
 		const previousOverflow = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
@@ -139,7 +135,7 @@ export default function Lightbox({
 				touchStartX.current = null;
 			}}
 		>
-			{/* Barre d'outils */}
+
 			<div className="flex items-center justify-between px-4 py-3 sm:px-6">
 				<span className="text-xs tabular-nums text-faint">
 					{index + 1} / {photos.length}
@@ -189,7 +185,6 @@ export default function Lightbox({
 				</div>
 			</div>
 
-			{/* Image */}
 			<div className="relative flex min-h-0 flex-1 items-center justify-center px-2 sm:px-16">
 				<button
 					type="button"
@@ -223,7 +218,6 @@ export default function Lightbox({
 				</button>
 			</div>
 
-			{/* Légende et EXIF */}
 			<div className="px-4 pb-6 pt-4 sm:px-8">
 				{photo.title && (
 					<p className="font-display text-lg text-paper">{photo.title}</p>
