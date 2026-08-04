@@ -1,34 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Raphotos
 
-## Getting Started
+Galerie photo personnelle — Next.js 16 (App Router), Tailwind 4, Supabase et
+Cloudflare R2.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+```
+Navigateur ──▶ Vercel (Next.js, RSC + ISR)
+                 ├─▶ Supabase Postgres  albums · photos · likes · comments · videos
+                 └─▶ R2 (CDN)           photos/{slug}/{thumb|grid|full}.avif
+                                        photos/{slug}/original.jpg
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Les images ne sont **pas** versionnées : elles vivent sur R2, en trois variantes
+AVIF pré-générées, servies via un loader `next/image` personnalisé
+(`src/lib/image-loader.ts`). L'optimiseur d'images de Vercel n'est donc jamais
+sollicité.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Démarrage
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm install
+cp .env.example .env   # puis compléter les variables
+npm run dev
+```
 
-## Learn More
+Le site se construit même sans base configurée : les pages affichent alors des
+états vides.
 
-To learn more about Next.js, take a look at the following resources:
+## Base de données
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Appliquer `supabase/migrations/0001_initial_schema.sql` dans l'éditeur SQL du
+tableau de bord Supabase (ou via la CLI). Le schéma installe les tables, la vue
+d'agrégats `photo_stats` et les politiques RLS (lecture publique restreinte au
+contenu publié ; toutes les écritures passent par le serveur).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Importer des photos
 
-## Deploy on Vercel
+```bash
+npm run import -- "/chemin/vers/le/dossier"
+npm run import -- "/chemin/vers/la/racine" --recursive   # un album par sous-dossier
+npm run import -- "/chemin" --dry-run                    # simulation
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Le script lit les EXIF, génère les variantes et le placeholder flou, envoie le
+tout sur R2 puis insère les lignes dans Supabase. Il est **idempotent** :
+l'empreinte SHA-256 du fichier sert de clé, on peut donc le relancer sans créer
+de doublon.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Options : `--album <nom>`, `--force`, `--concurrency <n>`.
+
+## Administration
+
+`/admin`, accessible par lien magique envoyé à l'adresse `ADMIN_EMAIL`.
+Permet de publier ou dépublier les photos (c'est là que se fait le tri
+éditorial), d'éditer titres et légendes, de gérer les albums et les vidéos, et
+de modérer les commentaires.
+
+## Scripts
+
+| Commande | Rôle |
+|---|---|
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Build de production |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | Vérification TypeScript |
+| `npm run import` | Import de photos vers R2 + Supabase |

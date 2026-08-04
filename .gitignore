@@ -24,8 +24,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# local env files — .env contient des secrets (clé service Supabase, clés R2)
+.env
 .env*.local
+!.env.example
 
 # vercel
 .vercel

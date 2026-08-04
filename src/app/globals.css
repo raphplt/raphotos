@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design system — éditorial sombre.
+   La photo est la seule source de couleur : l'interface reste
+   achromatique, l'accent n'est utilisé que pour les états interactifs.
+   ------------------------------------------------------------------ */
+@theme {
+	--color-ink: #0a0a0a;
+	--color-ink-soft: #121212;
+	--color-ink-raised: #1a1a1a;
+	--color-line: #262626;
+	--color-line-soft: #1f1f1f;
+
+	--color-paper: #f5f5f0;
+	--color-muted: #a3a3a0;
+	--color-faint: #6b6b68;
+
+	--color-accent: #d4a373;
+	--color-accent-soft: #e8c9a0;
+
+	--font-display: var(--font-serif), ui-serif, Georgia, serif;
+	--font-sans: var(--font-sans-body), ui-sans-serif, system-ui, sans-serif;
+
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-in-out-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+	:root {
+		color-scheme: dark;
+	}
+
+	html {
+		-webkit-text-size-adjust: 100%;
+		scroll-behavior: smooth;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+
+	body {
+		background-color: var(--color-ink);
+		color: var(--color-paper);
+		font-family: var(--font-sans);
+		font-synthesis-weight: none;
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	::selection {
+		background-color: var(--color-accent);
+		color: var(--color-ink);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+
+	/* Barre de défilement discrète, cohérente avec le fond sombre */
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+	::-webkit-scrollbar-track {
+		background: var(--color-ink);
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--color-line);
+		border-radius: 5px;
+		border: 2px solid var(--color-ink);
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: #333;
+	}
+}
+
+@layer utilities {
+	/* Grille masonry en colonnes CSS : préserve le ratio natif, aucun recadrage */
+	.masonry {
+		column-gap: var(--masonry-gap, 1rem);
+	}
+	.masonry > * {
+		break-inside: avoid;
+		margin-bottom: var(--masonry-gap, 1rem);
+	}
+
+	/* Lettrage éditorial des titres de section */
+	.tracking-editorial {
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+	}
+
+	.text-balance {
+		text-wrap: balance;
+	}
+
+	/* Révélation au scroll, pilotée par IntersectionObserver */
+	.reveal {
+		opacity: 0;
+		transform: translateY(14px);
+		transition:
+			opacity 0.7s var(--ease-out-expo),
+			transform 0.7s var(--ease-out-expo);
+	}
+	.reveal[data-visible="true"] {
+		opacity: 1;
+		transform: none;
+	}
+
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+	.no-scrollbar {
+		scrollbar-width: none;
+	}
+}
