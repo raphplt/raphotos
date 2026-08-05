@@ -21,15 +21,25 @@ export default async function AdminPhotosPage({
   await requireAdmin();
   const { filtre, album } = await searchParams;
   const onlyDrafts = filtre === "brouillons";
+  const onlyFeatured = filtre === "accueil";
 
   const [photos, albums, counts] = await Promise.all([
-    getAdminPhotos({ onlyDrafts, albumId: album }),
+    getAdminPhotos({ onlyDrafts, onlyFeatured, albumId: album }),
     getAdminAlbums(),
     getPhotosPageCounts(),
   ]);
 
   const filters = [
-    { label: "Toutes", href: "/admin/photos", active: !onlyDrafts && !album },
+    {
+      label: "Toutes",
+      href: "/admin/photos",
+      active: !onlyDrafts && !onlyFeatured && !album,
+    },
+    {
+      label: `Accueil (${counts.featured})`,
+      href: "/admin/photos?filtre=accueil",
+      active: onlyFeatured,
+    },
     {
       label: `Brouillons (${counts.drafts})`,
       href: "/admin/photos?filtre=brouillons",

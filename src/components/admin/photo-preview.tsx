@@ -10,6 +10,7 @@ import {
 	EyeOff,
 	Pencil,
 	Square,
+	Star,
 	Trash2,
 	X,
 } from "lucide-react";
@@ -26,6 +27,7 @@ interface PhotoPreviewProps {
 	onNavigate: (index: number) => void;
 	onToggleSelect: (photo: AdminPhoto) => void;
 	onTogglePublished: (photo: AdminPhoto) => void;
+	onToggleFeatured: (photo: AdminPhoto) => void;
 	onEdit: (photo: AdminPhoto) => void;
 	onDelete: (photo: AdminPhoto) => void;
 }
@@ -38,6 +40,7 @@ export default function PhotoPreview({
 	onNavigate,
 	onToggleSelect,
 	onTogglePublished,
+	onToggleFeatured,
 	onEdit,
 	onDelete,
 }: PhotoPreviewProps) {
@@ -133,6 +136,12 @@ export default function PhotoPreview({
 							Brouillon
 						</span>
 					)}
+					{photo.featured && (
+						<span className="flex shrink-0 items-center gap-1 bg-ink-raised px-2 py-1 text-[10px] tracking-editorial text-accent">
+							<Star size={10} className="fill-current" />
+							Accueil
+						</span>
+					)}
 				</div>
 
 				<div className="flex shrink-0 items-center gap-1">
@@ -148,6 +157,29 @@ export default function PhotoPreview({
 					>
 						{isSelected ? <Check size={15} /> : <Square size={15} />}
 						Sélectionner
+					</button>
+					<button
+						type="button"
+						onClick={() => onToggleFeatured(photo)}
+						title={
+							photo.featured
+								? "Retirer de la page d'accueil"
+								: "Mettre sur la page d'accueil"
+						}
+						aria-label={
+							photo.featured
+								? "Retirer de la page d'accueil"
+								: "Mettre sur la page d'accueil"
+						}
+						aria-pressed={photo.featured}
+						className={cn(
+							"rounded-full p-2.5 transition-colors",
+							photo.featured
+								? "text-accent hover:text-paper"
+								: "text-muted hover:text-accent",
+						)}
+					>
+						<Star size={18} className={cn(photo.featured && "fill-current")} />
 					</button>
 					<button
 						type="button"

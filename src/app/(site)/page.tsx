@@ -2,14 +2,22 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import PhotoImage from "@/components/gallery/photo-image";
-import { getAlbums, getLatestPhotos } from "@/lib/queries";
+import { getAlbums, getHeroPhoto, getLatestPhotos } from "@/lib/queries";
 import { formatAlbumTitle, pluralize } from "@/lib/utils";
 
-export const revalidate = 3600;
+// La hero est tirée au sort à chaque visite : la page ne peut donc pas être
+// mise en cache, sinon tout le monde verrait la même photo pendant une heure.
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-	const [latest, albums] = await Promise.all([getLatestPhotos(9), getAlbums()]);
-	const hero = latest[0];
+	const [hero, latest, albums] = await Promise.all([
+		getHeroPhoto(),
+		getLatestPhotos(9),
+		getAlbums(),
+	]);
+
+	// Sans ce filtre, la photo de la hero réapparaîtrait juste en dessous.
+	const recent = latest.filter((photo) => photo.id !== hero?.id).slice(0, 8);
 
 	return (
 		<>
@@ -67,7 +75,7 @@ export default async function HomePage() {
 				)}
 			</section>
 
-			{latest.length > 1 && (
+			{recent.length > 0 && (
 				<section className="mx-auto max-w-[1600px] px-5 py-24 sm:px-10 sm:py-32">
 					<div className="flex items-end justify-between gap-6">
 						<h2 className="text-[11px] tracking-editorial text-faint">
@@ -86,7 +94,7 @@ export default async function HomePage() {
 					</div>
 
 					<div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-						{latest.slice(1, 9).map((photo) => (
+						{recent.map((photo) => (
 							<Link
 								key={photo.id}
 								href={

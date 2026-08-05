@@ -34,6 +34,8 @@ export interface Photo {
 	gps_lng: number | null;
 	file_hash: string;
 	published: boolean;
+	/** Candidate à la hero de la page d'accueil. */
+	featured: boolean;
 	sort_order: number;
 	created_at: string;
 }

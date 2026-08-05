@@ -16,11 +16,15 @@ type DeleteResult =
 	| ActionError
 	| { success: true; count: number; orphanedFiles: number };
 
+/**
+ * `revalidatePath` raisonne sur l'arborescence de fichiers, pas sur l'URL :
+ * depuis que les pages publiques vivent dans le groupe (site), des chemins
+ * comme "/photos" ne correspondent plus à aucune route et n'invalidaient rien.
+ * Purger depuis la racine couvre tout le sous-arbre — l'admin est assez peu
+ * sollicité pour que le surcoût de régénération soit sans importance.
+ */
 function revalidatePublicPages() {
-	revalidatePath("/", "page");
-	revalidatePath("/photos", "page");
-	revalidatePath("/photos/[album]", "page");
-	revalidatePath("/videos", "page");
+	revalidatePath("/", "layout");
 }
 
 const photoDetailsSchema = z.object({
@@ -76,6 +80,27 @@ export async function setPhotosPublished(
 	const { error } = await supabase
 		.from("photos")
 		.update({ published })
+		.in("id", parsed.data);
+
+	if (error) return { error: error.message };
+	revalidatePublicPages();
+	revalidatePath("/admin/photos");
+	return { success: true, count: parsed.data.length };
+}
+
+/** Marque des photos comme candidates à la hero de la page d'accueil. */
+export async function setPhotosFeatured(
+	photoIds: string[],
+	featured: boolean,
+): Promise<PublishResult> {
+	await requireAdmin();
+	const parsed = uuidList.safeParse(photoIds);
+	if (!parsed.success) return { error: "Sélection invalide" };
+
+	const supabase = createSupabaseAdminClient();
+	const { error } = await supabase
+		.from("photos")
+		.update({ featured })
 		.in("id", parsed.data);
 
 	if (error) return { error: error.message };

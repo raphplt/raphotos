@@ -27,16 +27,18 @@ export type AdminPhoto = Pick<
 	| "shutter_speed"
 	| "focal_length"
 	| "published"
+	| "featured"
 > & { album_title: string | null };
 
 const ADMIN_PHOTO_COLUMNS =
-	"id, slug, album_id, width, height, title, caption, taken_at, camera, lens, iso, aperture, shutter_speed, focal_length, published";
+	"id, slug, album_id, width, height, title, caption, taken_at, camera, lens, iso, aperture, shutter_speed, focal_length, published, featured";
 
 export const ADMIN_PHOTOS_LIMIT = 1200;
 
 export async function getAdminPhotos(options?: {
 	albumId?: string;
 	onlyDrafts?: boolean;
+	onlyFeatured?: boolean;
 	limit?: number;
 }): Promise<AdminPhoto[]> {
 	const supabase = createSupabaseAdminClient();
@@ -48,6 +50,7 @@ export async function getAdminPhotos(options?: {
 
 	if (options?.albumId) query = query.eq("album_id", options.albumId);
 	if (options?.onlyDrafts) query = query.eq("published", false);
+	if (options?.onlyFeatured) query = query.eq("featured", true);
 
 	const { data } = await query;
 
@@ -154,20 +157,29 @@ export async function getPendingCommentsCount(): Promise<number> {
 /** Pastille de navigation + compteur de brouillons, en une seule attente. */
 export async function getPhotosPageCounts(): Promise<{
 	drafts: number;
+	featured: number;
 	pendingComments: number;
 }> {
 	const supabase = createSupabaseAdminClient();
-	const [drafts, pending] = await Promise.all([
+	const [drafts, featured, pending] = await Promise.all([
 		supabase
 			.from("photos")
 			.select("id", { count: "exact", head: true })
 			.eq("published", false),
 		supabase
+			.from("photos")
+			.select("id", { count: "exact", head: true })
+			.eq("featured", true),
+		supabase
 			.from("comments")
 			.select("id", { count: "exact", head: true })
 			.eq("status", "pending"),
 	]);
-	return { drafts: drafts.count ?? 0, pendingComments: pending.count ?? 0 };
+	return {
+		drafts: drafts.count ?? 0,
+		featured: featured.count ?? 0,
+		pendingComments: pending.count ?? 0,
+	};
 }
 
 export interface AdminStats {

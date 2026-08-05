@@ -9,12 +9,14 @@ import {
 	EyeOff,
 	Loader2,
 	Pencil,
+	Star,
 	Trash2,
 	X,
 } from "lucide-react";
 
 import {
 	deletePhotos,
+	setPhotosFeatured,
 	setPhotosPublished,
 	updatePhotoDetails,
 } from "@/app/admin/actions";
@@ -68,9 +70,12 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 
 	const [optimisticItems, applyOptimistic] = useOptimistic(
 		items,
-		(state: AdminPhoto[], update: { ids: Set<string>; published: boolean }) =>
+		(
+			state: AdminPhoto[],
+			update: { ids: Set<string>; patch: Partial<AdminPhoto> },
+		) =>
 			state.map((photo) =>
-				update.ids.has(photo.id) ? { ...photo, published: update.published } : photo,
+				update.ids.has(photo.id) ? { ...photo, ...update.patch } : photo,
 			),
 	);
 
@@ -103,7 +108,7 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 	function publishMany(ids: string[], published: boolean) {
 		const idSet = new Set(ids);
 		startTransition(async () => {
-			applyOptimistic({ ids: idSet, published });
+			applyOptimistic({ ids: idSet, patch: { published } });
 			const result = await setPhotosPublished(ids, published);
 			if ("error" in result) {
 				setNotice(result.error);
@@ -115,6 +120,27 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 			setSelected(new Set());
 			setNotice(
 				`${ids.length} photo${ids.length > 1 ? "s" : ""} ${published ? "publiée" : "dépubliée"}${ids.length > 1 ? "s" : ""}.`,
+			);
+		});
+	}
+
+	function featureMany(ids: string[], featured: boolean) {
+		const idSet = new Set(ids);
+		startTransition(async () => {
+			applyOptimistic({ ids: idSet, patch: { featured } });
+			const result = await setPhotosFeatured(ids, featured);
+			if ("error" in result) {
+				setNotice(result.error);
+				return;
+			}
+			setItems((current) =>
+				current.map((item) => (idSet.has(item.id) ? { ...item, featured } : item)),
+			);
+			setSelected(new Set());
+			setNotice(
+				featured
+					? `${ids.length} photo${ids.length > 1 ? "s" : ""} ajoutée${ids.length > 1 ? "s" : ""} à la page d'accueil.`
+					: `${ids.length} photo${ids.length > 1 ? "s" : ""} retirée${ids.length > 1 ? "s" : ""} de la page d'accueil.`,
 			);
 		});
 	}
@@ -239,11 +265,22 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 									/>
 								</button>
 
-								{!photo.published && (
-									<span className="absolute left-2 top-2 bg-ink/90 px-2 py-1 text-[10px] tracking-editorial text-muted">
-										Brouillon
-									</span>
-								)}
+								<div className="pointer-events-none absolute left-2 top-2 flex flex-col items-start gap-1">
+									{!photo.published && (
+										<span className="bg-ink/90 px-2 py-1 text-[10px] tracking-editorial text-muted">
+											Brouillon
+										</span>
+									)}
+									{photo.featured && (
+										<span
+											title="Apparaît sur la page d'accueil"
+											className="flex items-center gap-1 bg-ink/90 px-2 py-1 text-[10px] tracking-editorial text-accent"
+										>
+											<Star size={10} className="fill-current" />
+											Accueil
+										</span>
+									)}
+								</div>
 
 								<label
 									className={cn(
@@ -282,6 +319,29 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 									className="rounded-full bg-ink-raised p-2 text-muted transition-colors hover:text-paper"
 								>
 									{photo.published ? <EyeOff size={14} /> : <Eye size={14} />}
+								</button>
+								<button
+									type="button"
+									onClick={() => featureMany([photo.id], !photo.featured)}
+									title={
+										photo.featured
+											? "Retirer de la page d'accueil"
+											: "Mettre sur la page d'accueil"
+									}
+									aria-label={
+										photo.featured
+											? "Retirer de la page d'accueil"
+											: "Mettre sur la page d'accueil"
+									}
+									aria-pressed={photo.featured}
+									className={cn(
+										"rounded-full bg-ink-raised p-2 transition-colors",
+										photo.featured
+											? "text-accent hover:text-paper"
+											: "text-muted hover:text-accent",
+									)}
+								>
+									<Star size={14} className={cn(photo.featured && "fill-current")} />
 								</button>
 								<button
 									type="button"
@@ -363,6 +423,22 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 					<button
 						type="button"
 						disabled={isPending}
+						onClick={() => featureMany([...selected], true)}
+						className="flex items-center gap-1.5 border border-line px-3 py-2 text-muted transition-colors hover:text-accent disabled:opacity-50"
+					>
+						<Star size={13} /> Mettre à l&apos;accueil
+					</button>
+					<button
+						type="button"
+						disabled={isPending}
+						onClick={() => featureMany([...selected], false)}
+						className="flex items-center gap-1.5 border border-line px-3 py-2 text-muted transition-colors hover:text-paper disabled:opacity-50"
+					>
+						<Star size={13} /> Retirer de l&apos;accueil
+					</button>
+					<button
+						type="button"
+						disabled={isPending}
 						onClick={() => removeMany([...selected])}
 						className="flex items-center gap-1.5 border border-line px-3 py-2 text-muted transition-colors hover:border-red-400/60 hover:text-red-400 disabled:opacity-50"
 					>
@@ -390,6 +466,7 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 					onTogglePublished={(photo) =>
 						publishMany([photo.id], !photo.published)
 					}
+					onToggleFeatured={(photo) => featureMany([photo.id], !photo.featured)}
 					onEdit={(photo) => {
 						setPreviewIndex(null);
 						setEditing(photo);

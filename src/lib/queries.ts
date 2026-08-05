@@ -150,6 +150,30 @@ export async function getLatestPhotos(limit = 12): Promise<PhotoWithStats[]> {
 	return attachStats((data as unknown as PhotoRow[] | null) ?? []);
 }
 
+/**
+ * Photos épinglées pour la hero. Sans sélection marquée, on retombe sur les
+ * dernières publiées : la page d'accueil ne doit jamais se retrouver nue.
+ */
+export async function getHeroPhoto(): Promise<PhotoWithStats | null> {
+	if (!isSupabaseConfigured) return null;
+
+	const { data } = await supabasePublic
+		.from("photos")
+		.select(PHOTO_FIELDS)
+		.eq("published", true)
+		.eq("featured", true);
+
+	const pool = (data as unknown as PhotoRow[] | null) ?? [];
+	if (pool.length === 0) {
+		const [latest] = await getLatestPhotos(1);
+		return latest ?? null;
+	}
+
+	const pick = pool[Math.floor(Math.random() * pool.length)];
+	const [withStats] = await attachStats([pick]);
+	return withStats ?? null;
+}
+
 export async function getMostLikedPhotos(limit = 6): Promise<PhotoWithStats[]> {
 	if (!isSupabaseConfigured) return [];
 	const { data: stats } = await supabasePublic
