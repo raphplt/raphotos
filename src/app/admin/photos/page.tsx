@@ -3,6 +3,7 @@ import Link from "next/link";
 import AdminNav from "@/components/admin/admin-nav";
 import PhotoManager from "@/components/admin/photo-manager";
 import {
+	ADMIN_PHOTOS_LIMIT,
 	getAdminAlbums,
 	getAdminPhotos,
 	getAdminStats,
@@ -46,9 +47,15 @@ export default async function AdminPhotosPage({
 						<h1 className="font-display text-4xl">Photos</h1>
 						<p className="mt-2 text-sm text-muted">
 							{photos.length} photo{photos.length > 1 ? "s" : ""} affichée
-							{photos.length > 1 ? "s" : ""} — masque une photo pour la retirer du
-							site sans la supprimer.
+							{photos.length > 1 ? "s" : ""} — dépublier retire du site sans
+							supprimer, supprimer efface aussi les fichiers sur R2.
 						</p>
+						{photos.length === ADMIN_PHOTOS_LIMIT && (
+							<p className="mt-1 text-sm text-accent">
+								Affichage plafonné à {ADMIN_PHOTOS_LIMIT} photos : filtrez par album
+								pour voir les suivantes.
+							</p>
+						)}
 					</div>
 
 					<nav className="flex flex-wrap gap-2">

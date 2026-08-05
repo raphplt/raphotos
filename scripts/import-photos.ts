@@ -15,7 +15,7 @@ import sharp, { type Sharp } from "sharp";
 import "dotenv/config";
 
 import { IMAGE_VARIANTS, type ImageVariant } from "../src/lib/image-variants";
-import { formatAlbumTitle, slugify } from "../src/lib/utils";
+import { formatAlbumTitle, parseSeasonYear, slugify } from "../src/lib/utils";
 
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"]);
 
@@ -187,7 +187,8 @@ async function processPhoto(
 	const height = metadata.height ?? 0;
 	if (!width || !height) throw new Error("dimensions illisibles");
 
-	const baseName = basename(fileName, extname(fileName));
+	// Un préfixe « 001_ » sert à ordonner l'album, il n'a rien à faire dans l'URL.
+	const baseName = basename(fileName, extname(fileName)).replace(/^\d+_/, "");
 	const slug = `${slugify(baseName)}-${fileHash.slice(0, 8)}`;
 	const originalExt = extname(fileName).slice(1).toLowerCase() || "jpg";
 
@@ -248,8 +249,11 @@ async function processPhoto(
 async function ensureAlbum(folderName: string): Promise<string | null> {
 	const title = values.album ?? formatAlbumTitle(folderName);
 	const slug = slugify(title);
-	const [season, yearRaw] = folderName.split("_");
-	const year = Number(yearRaw);
+
+	// Le titre l'emporte (il peut venir de --album), le dossier sert de repli.
+	const fromTitle = parseSeasonYear(title);
+	const { season, year } =
+		fromTitle.season || fromTitle.year !== null ? fromTitle : parseSeasonYear(folderName);
 
 	if (!supabase) {
 		console.log(`Album (simulation) : ${title} [${slug}]`);
@@ -259,13 +263,7 @@ async function ensureAlbum(folderName: string): Promise<string | null> {
 	const { data, error } = await supabase
 		.from("albums")
 		.upsert(
-			{
-				slug,
-				title,
-				season: season && Number.isFinite(year) ? season : null,
-				year: Number.isFinite(year) ? year : null,
-				published: true,
-			},
+			{ slug, title, season, year, published: true },
 			{ onConflict: "slug" },
 		)
 		.select("id")

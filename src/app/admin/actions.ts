@@ -4,31 +4,23 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireAdmin } from "@/lib/auth";
+import { deletePhotoObjects } from "@/lib/r2";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
 const uuid = z.uuid();
+const uuidList = z.array(uuid).min(1).max(500);
+
+type ActionError = { error: string };
+type PublishResult = ActionError | { success: true; count: number };
+type DeleteResult =
+	| ActionError
+	| { success: true; count: number; orphanedFiles: number };
 
 function revalidatePublicPages() {
 	revalidatePath("/", "page");
 	revalidatePath("/photos", "page");
 	revalidatePath("/photos/[album]", "page");
 	revalidatePath("/videos", "page");
-}
-
-export async function setPhotoPublished(photoId: string, published: boolean) {
-	await requireAdmin();
-	if (!uuid.safeParse(photoId).success) return { error: "Photo inconnue" };
-
-	const supabase = createSupabaseAdminClient();
-	const { error } = await supabase
-		.from("photos")
-		.update({ published })
-		.eq("id", photoId);
-
-	if (error) return { error: error.message };
-	revalidatePublicPages();
-	revalidatePath("/admin/photos");
-	return { success: true };
 }
 
 const photoDetailsSchema = z.object({
@@ -72,18 +64,65 @@ export async function updatePhotoDetails(
 	return { success: true };
 }
 
-export async function deletePhoto(photoId: string) {
+export async function setPhotosPublished(
+	photoIds: string[],
+	published: boolean,
+): Promise<PublishResult> {
 	await requireAdmin();
-	if (!uuid.safeParse(photoId).success) return { error: "Photo inconnue" };
+	const parsed = uuidList.safeParse(photoIds);
+	if (!parsed.success) return { error: "Sélection invalide" };
 
 	const supabase = createSupabaseAdminClient();
-
-	const { error } = await supabase.from("photos").delete().eq("id", photoId);
+	const { error } = await supabase
+		.from("photos")
+		.update({ published })
+		.in("id", parsed.data);
 
 	if (error) return { error: error.message };
 	revalidatePublicPages();
 	revalidatePath("/admin/photos");
-	return { success: true };
+	return { success: true, count: parsed.data.length };
+}
+
+export async function deletePhoto(photoId: string): Promise<DeleteResult> {
+	return deletePhotos([photoId]);
+}
+
+/**
+ * Supprime les fiches puis leurs fichiers sur R2. La base passe en premier :
+ * si le nettoyage du bucket échoue, il reste des objets orphelins — gênant
+ * mais invisible, alors que l'inverse afficherait des images cassées.
+ */
+export async function deletePhotos(photoIds: string[]): Promise<DeleteResult> {
+	await requireAdmin();
+	const parsed = uuidList.safeParse(photoIds);
+	if (!parsed.success) return { error: "Sélection invalide" };
+
+	const supabase = createSupabaseAdminClient();
+
+	const { data: photos, error: readError } = await supabase
+		.from("photos")
+		.select("id, slug, original_ext")
+		.in("id", parsed.data);
+
+	if (readError) return { error: readError.message };
+	if (!photos?.length) return { error: "Photo introuvable" };
+
+	const { error } = await supabase.from("photos").delete().in("id", parsed.data);
+	if (error) return { error: error.message };
+
+	const { failedKeys } = await deletePhotoObjects(
+		photos as { slug: string; original_ext: string }[],
+	);
+
+	revalidatePublicPages();
+	revalidatePath("/admin/photos");
+
+	return {
+		success: true,
+		count: photos.length,
+		orphanedFiles: failedKeys.length,
+	};
 }
 
 const albumSchema = z.object({

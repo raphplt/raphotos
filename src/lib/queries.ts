@@ -1,6 +1,7 @@
 import "server-only";
 
 import { isSupabaseConfigured, supabasePublic } from "./supabase/public";
+import { compareAlbumsByRecency } from "./utils";
 import type {
 	Album,
 	AlbumWithCover,
@@ -55,11 +56,10 @@ export async function getAlbums(): Promise<AlbumWithCover[]> {
 	const { data: albums } = await supabasePublic
 		.from("albums")
 		.select("*")
-		.eq("published", true)
-		.order("year", { ascending: false, nullsFirst: false })
-		.order("sort_order", { ascending: true });
+		.eq("published", true);
 
 	if (!albums?.length) return [];
+	(albums as Album[]).sort(compareAlbumsByRecency);
 
 	const { data: photos } = await supabasePublic
 		.from("photos")

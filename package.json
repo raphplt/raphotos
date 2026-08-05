@@ -15,6 +15,7 @@
     "import": "tsx scripts/import-photos.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1102.0",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.0",
     "@vercel/analytics": "^2.0.1",
@@ -30,7 +31,6 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.1102.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^26.1.2",
     "@types/react": "^19.2.0",

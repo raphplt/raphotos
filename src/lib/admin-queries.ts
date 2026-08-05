@@ -1,11 +1,14 @@
 import "server-only";
 
 import { createSupabaseAdminClient } from "./supabase/server";
+import { compareAlbumsByRecency } from "./utils";
 import type { Album, Comment, Photo, Video } from "./types";
 
 export interface AdminPhoto extends Photo {
 	album_title: string | null;
 }
+
+export const ADMIN_PHOTOS_LIMIT = 1200;
 
 export async function getAdminPhotos(options?: {
 	albumId?: string;
@@ -17,7 +20,7 @@ export async function getAdminPhotos(options?: {
 		.from("photos")
 		.select("*, albums!photos_album_id_fkey(title)")
 		.order("created_at", { ascending: false })
-		.limit(options?.limit ?? 500);
+		.limit(options?.limit ?? ADMIN_PHOTOS_LIMIT);
 
 	if (options?.albumId) query = query.eq("album_id", options.albumId);
 	if (options?.onlyDrafts) query = query.eq("published", false);
@@ -39,11 +42,7 @@ export async function getAdminAlbums(): Promise<
 	const supabase = createSupabaseAdminClient();
 
 	const [{ data: albums }, { data: photos }] = await Promise.all([
-		supabase
-			.from("albums")
-			.select("*")
-			.order("year", { ascending: false, nullsFirst: false })
-			.order("sort_order", { ascending: true }),
+		supabase.from("albums").select("*"),
 		supabase.from("photos").select("album_id"),
 	]);
 
@@ -53,10 +52,12 @@ export async function getAdminAlbums(): Promise<
 		counts.set(photo.album_id, (counts.get(photo.album_id) ?? 0) + 1);
 	}
 
-	return ((albums as Album[] | null) ?? []).map((album) => ({
-		...album,
-		photo_count: counts.get(album.id) ?? 0,
-	}));
+	return ((albums as Album[] | null) ?? [])
+		.sort(compareAlbumsByRecency)
+		.map((album) => ({
+			...album,
+			photo_count: counts.get(album.id) ?? 0,
+		}));
 }
 
 export interface AdminComment extends Comment {

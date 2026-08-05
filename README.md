@@ -50,6 +50,14 @@ de doublon.
 
 Options : `--album <nom>`, `--force`, `--concurrency <n>`.
 
+Un dossier nommé `Saison_Année` (`Winter_2025`, `Summer_2024`…) devient un album
+titré en français, avec `season` et `year` renseignés — ce sont eux qui
+ordonnent la galerie, de la saison la plus récente à la plus ancienne.
+**L'hiver porte l'année de son mois de janvier** : décembre 2024 et février 2025
+appartiennent au même « Hiver 2025 ». Dans un dossier, les fichiers sont
+importés par ordre alphabétique ; un préfixe `001_`, `002_`… fixe donc l'ordre
+d'affichage sans apparaître dans l'URL de la photo.
+
 ## Administration
 
 `/admin`, accessible par lien magique envoyé à l'adresse `ADMIN_EMAIL`.
