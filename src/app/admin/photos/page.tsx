@@ -109,7 +109,11 @@ export default async function AdminPhotosPage({
               pour en ajouter.
             </p>
           ) : (
+            /* La grille garde sa liste dans un useState : sans clé liée au
+               filtre, changer d'album ne remplacerait pas les photos déjà
+               montées. */
             <PhotoManager
+              key={`${filtre ?? "toutes"}:${album ?? "tous"}`}
               photos={photos}
               albums={albums.map(({ id, title }) => ({ id, title }))}
             />
