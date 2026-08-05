@@ -48,7 +48,10 @@ tout sur R2 puis insère les lignes dans Supabase. Il est **idempotent** :
 l'empreinte SHA-256 du fichier sert de clé, on peut donc le relancer sans créer
 de doublon.
 
-Options : `--album <nom>`, `--force`, `--concurrency <n>`.
+Options : `--album <nom>`, `--force`, `--concurrency <n>`,
+`--sort-offset <n>` (pour compléter un album existant : reprend la numérotation
+après le dernier `sort_order` en place, au lieu de repartir de zéro et de
+s'entrelacer avec les photos déjà là).
 
 Un dossier nommé `Saison_Année` (`Winter_2025`, `Summer_2024`…) devient un album
 titré en français, avec `season` et `year` renseignés — ce sont eux qui

@@ -27,6 +27,7 @@ const { values, positionals } = parseArgs({
 		force: { type: "boolean", default: false },
 		recursive: { type: "boolean", default: false },
 		concurrency: { type: "string", default: "4" },
+		"sort-offset": { type: "string", default: "0" },
 	},
 });
 
@@ -39,6 +40,9 @@ if (!sourceDir) {
 const dryRun = values["dry-run"];
 const force = values.force;
 const concurrency = Number(values.concurrency) || 4;
+// Pour compléter un album existant sans piétiner l'ordre déjà en place :
+// on reprend la numérotation après le dernier sort_order utilisé.
+const sortOffset = Number(values["sort-offset"]) || 0;
 
 function requireEnv(name: string): string {
 	const value = process.env[name];
@@ -233,7 +237,7 @@ async function processPhoto(
 				gps_lng: exif.gpsLng,
 				file_hash: fileHash,
 				published: true,
-				sort_order: index,
+				sort_order: sortOffset + index,
 			},
 			{ onConflict: "file_hash" },
 		);

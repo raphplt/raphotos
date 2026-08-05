@@ -3,8 +3,6 @@ import { Instrument_Serif, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
 import "./globals.css";
 
 const serif = Instrument_Serif({
@@ -52,15 +50,7 @@ export default function RootLayout({
 	return (
 		<html lang="fr" className={`${serif.variable} ${sans.variable}`}>
 			<body className="min-h-dvh antialiased">
-				<a
-					href="#contenu"
-					className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-paper focus:px-4 focus:py-2 focus:text-ink"
-				>
-					Aller au contenu
-				</a>
-				<Header />
-				<main id="contenu">{children}</main>
-				<Footer />
+				{children}
 				<Analytics />
 				<SpeedInsights />
 			</body>
