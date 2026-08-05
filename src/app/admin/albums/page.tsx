@@ -1,17 +1,20 @@
 import AdminNav from "@/components/admin/admin-nav";
 import AlbumManager from "@/components/admin/album-manager";
-import { getAdminAlbums, getAdminStats } from "@/lib/admin-queries";
+import { getAdminAlbums, getPendingCommentsCount } from "@/lib/admin-queries";
 import { requireAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminAlbumsPage() {
 	await requireAdmin();
-	const [albums, stats] = await Promise.all([getAdminAlbums(), getAdminStats()]);
+	const [albums, pendingCount] = await Promise.all([
+		getAdminAlbums(),
+		getPendingCommentsCount(),
+	]);
 
 	return (
 		<>
-			<AdminNav pendingCount={stats.pendingComments} />
+			<AdminNav pendingCount={pendingCount} />
 
 			<div className="mx-auto max-w-3xl px-5 py-12 sm:px-8">
 				<h1 className="font-display text-4xl">Albums</h1>

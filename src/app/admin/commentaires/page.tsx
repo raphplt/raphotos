@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import AdminNav from "@/components/admin/admin-nav";
 import CommentModeration from "@/components/admin/comment-moderation";
-import { getAdminComments, getAdminStats } from "@/lib/admin-queries";
+import { getAdminComments, getPendingCommentsCount } from "@/lib/admin-queries";
 import { requireAdmin } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import type { CommentStatus } from "@/lib/types";
@@ -27,14 +27,14 @@ export default async function AdminCommentsPage({
 	const active = (FILTERS.find((f) => f.value === statut)?.value ??
 		"pending") as CommentStatus | "all";
 
-	const [comments, stats] = await Promise.all([
+	const [comments, pendingCount] = await Promise.all([
 		getAdminComments(active === "all" ? undefined : active),
-		getAdminStats(),
+		getPendingCommentsCount(),
 	]);
 
 	return (
 		<>
-			<AdminNav pendingCount={stats.pendingComments} />
+			<AdminNav pendingCount={pendingCount} />
 
 			<div className="mx-auto max-w-3xl px-5 py-12 sm:px-8">
 				<h1 className="font-display text-4xl">Commentaires</h1>
@@ -55,9 +55,9 @@ export default async function AdminCommentsPage({
 							)}
 						>
 							{filter.label}
-							{filter.value === "pending" && stats.pendingComments > 0 && (
+							{filter.value === "pending" && pendingCount > 0 && (
 								<span className="ml-2 tabular-nums text-accent">
-									{stats.pendingComments}
+									{pendingCount}
 								</span>
 							)}
 						</Link>

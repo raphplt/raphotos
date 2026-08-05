@@ -1,17 +1,20 @@
 import AdminNav from "@/components/admin/admin-nav";
 import VideoManager from "@/components/admin/video-manager";
-import { getAdminStats, getAdminVideos } from "@/lib/admin-queries";
+import { getAdminVideos, getPendingCommentsCount } from "@/lib/admin-queries";
 import { requireAdmin } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminVideosPage() {
 	await requireAdmin();
-	const [videos, stats] = await Promise.all([getAdminVideos(), getAdminStats()]);
+	const [videos, pendingCount] = await Promise.all([
+		getAdminVideos(),
+		getPendingCommentsCount(),
+	]);
 
 	return (
 		<>
-			<AdminNav pendingCount={stats.pendingComments} />
+			<AdminNav pendingCount={pendingCount} />
 
 			<div className="mx-auto max-w-3xl px-5 py-12 sm:px-8">
 				<h1 className="font-display text-4xl">Vidéos</h1>

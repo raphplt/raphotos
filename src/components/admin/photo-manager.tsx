@@ -29,6 +29,8 @@ interface PhotoManagerProps {
 	albums: Pick<Album, "id" | "title">[];
 }
 
+const PAGE_SIZE = 150;
+
 export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 	const [editing, setEditing] = useState<AdminPhoto | null>(null);
 	const [previewIndex, setPreviewIndex] = useState<number | null>(null);
@@ -39,6 +41,11 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 	const [bulkMode, setBulkMode] = useState(false);
 	const [notice, setNotice] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
+
+	// Hydrater plusieurs centaines de vignettes d'un coup fige la page à
+	// l'arrivée : on les rend par tranches. La sélection, elle, porte toujours
+	// sur l'ensemble chargé.
+	const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
 	// Ancre du Maj+clic : dernière vignette cochée à la main.
 	const lastToggled = useRef<string | null>(null);
@@ -192,7 +199,7 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 			</div>
 
 			<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-				{optimisticItems.map((photo, index) => {
+				{optimisticItems.slice(0, visibleCount).map((photo, index) => {
 					const isSelected = selected.has(photo.id);
 
 					return (
@@ -303,6 +310,31 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 					);
 				})}
 			</div>
+
+			{visibleCount < optimisticItems.length && (
+				<div className="mt-10 flex flex-col items-center gap-3">
+					<p className="text-xs text-faint">
+						{visibleCount} sur {optimisticItems.length} affichées
+					</p>
+					<div className="flex flex-wrap justify-center gap-2">
+						<button
+							type="button"
+							onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
+							className="border border-line px-5 py-2.5 text-xs tracking-editorial text-muted transition-colors hover:border-accent/60 hover:text-paper"
+						>
+							Afficher {Math.min(PAGE_SIZE, optimisticItems.length - visibleCount)} de
+							plus
+						</button>
+						<button
+							type="button"
+							onClick={() => setVisibleCount(optimisticItems.length)}
+							className="border border-line px-5 py-2.5 text-xs tracking-editorial text-faint transition-colors hover:text-paper"
+						>
+							Tout afficher ({optimisticItems.length})
+						</button>
+					</div>
+				</div>
+			)}
 
 			{selected.size > 0 && (
 				<div className="sticky bottom-6 z-40 mx-auto mt-8 flex w-fit flex-wrap items-center gap-2 border border-line bg-ink-soft/95 px-4 py-3 text-xs backdrop-blur-sm">

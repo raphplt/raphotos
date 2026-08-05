@@ -206,8 +206,6 @@ export default function PhotoPreview({
 					height={photo.height}
 					sizes="100vw"
 					priority
-					placeholder={photo.lqip ? "blur" : "empty"}
-					blurDataURL={photo.lqip ?? undefined}
 					className={cn(
 						"max-h-full w-auto max-w-full object-contain transition-opacity",
 						!photo.published && "opacity-60",
