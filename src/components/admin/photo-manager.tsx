@@ -1,8 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useOptimistic, useRef, useState, useTransition } from "react";
-import { Check, Eye, EyeOff, Pencil, Trash2, X } from "lucide-react";
+import { useEffect, useOptimistic, useRef, useState, useTransition } from "react";
+import {
+	Check,
+	CheckSquare,
+	Eye,
+	EyeOff,
+	Loader2,
+	Pencil,
+	Trash2,
+	X,
+} from "lucide-react";
 
 import {
 	deletePhotos,
@@ -25,11 +34,30 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 	const [previewIndex, setPreviewIndex] = useState<number | null>(null);
 	const [items, setItems] = useState(photos);
 	const [selected, setSelected] = useState<Set<string>>(new Set());
+	// En mode sélection, cliquer une vignette la coche au lieu de l'agrandir :
+	// on trie une planche entière sans viser les cases une par une.
+	const [bulkMode, setBulkMode] = useState(false);
 	const [notice, setNotice] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
 
 	// Ancre du Maj+clic : dernière vignette cochée à la main.
 	const lastToggled = useRef<string | null>(null);
+
+	function exitBulkMode() {
+		setBulkMode(false);
+		setSelected(new Set());
+		lastToggled.current = null;
+	}
+
+	useEffect(() => {
+		if (!bulkMode) return;
+		const onKey = (event: KeyboardEvent) => {
+			// L'aperçu gère sa propre touche Échap, on ne lui coupe pas l'herbe.
+			if (event.key === "Escape" && previewIndex === null) exitBulkMode();
+		};
+		window.addEventListener("keydown", onKey);
+		return () => window.removeEventListener("keydown", onKey);
+	}, [bulkMode, previewIndex]);
 
 	const [optimisticItems, applyOptimistic] = useOptimistic(
 		items,
@@ -121,20 +149,44 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 
 	return (
 		<>
-			<div className="mb-6 flex flex-wrap items-center gap-4 text-xs">
+			<div className="mb-6 flex flex-wrap items-center gap-3 text-xs">
 				<button
 					type="button"
-					onClick={() =>
-						setSelected(
-							allSelected ? new Set() : new Set(optimisticItems.map((item) => item.id)),
-						)
-					}
-					className="border border-line px-4 py-2 tracking-editorial text-faint transition-colors hover:text-paper"
+					onClick={() => (bulkMode ? exitBulkMode() : setBulkMode(true))}
+					aria-pressed={bulkMode}
+					className={cn(
+						"flex items-center gap-2 border px-4 py-2 tracking-editorial transition-colors",
+						bulkMode
+							? "border-accent/60 bg-ink-raised text-paper"
+							: "border-line text-faint hover:text-paper",
+					)}
 				>
-					{allSelected ? "Tout désélectionner" : `Tout sélectionner (${optimisticItems.length})`}
+					<CheckSquare size={14} />
+					{bulkMode ? "Quitter le mode sélection" : "Mode sélection"}
 				</button>
+
+				{bulkMode && (
+					<button
+						type="button"
+						onClick={() =>
+							setSelected(
+								allSelected
+									? new Set()
+									: new Set(optimisticItems.map((item) => item.id)),
+							)
+						}
+						className="border border-line px-4 py-2 tracking-editorial text-faint transition-colors hover:text-paper"
+					>
+						{allSelected
+							? "Tout désélectionner"
+							: `Tout sélectionner (${optimisticItems.length})`}
+					</button>
+				)}
+
 				<p className="text-faint">
-					Maj+clic sur une case pour sélectionner une plage.
+					{bulkMode
+						? "Clic pour cocher · Maj+clic pour une plage · Échap pour quitter"
+						: "Clic pour agrandir une photo."}
 				</p>
 				{notice && <p className="text-accent">{notice}</p>}
 			</div>
@@ -154,9 +206,21 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 							>
 								<button
 									type="button"
-									onClick={() => setPreviewIndex(index)}
-									aria-label={`Agrandir ${photo.title ?? photo.slug}`}
-									className="block w-full cursor-zoom-in"
+									onClick={(event) =>
+										bulkMode
+											? toggleSelected(photo, event.shiftKey)
+											: setPreviewIndex(index)
+									}
+									aria-label={
+										bulkMode
+											? `Sélectionner ${photo.title ?? photo.slug}`
+											: `Agrandir ${photo.title ?? photo.slug}`
+									}
+									aria-pressed={bulkMode ? isSelected : undefined}
+									className={cn(
+										"block w-full",
+										bulkMode ? "cursor-pointer" : "cursor-zoom-in",
+									)}
 								>
 									<Image
 										src={variantUrl(photo.slug, "thumb")}
@@ -177,7 +241,7 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 								<label
 									className={cn(
 										"absolute right-2 top-2 flex h-7 w-7 cursor-pointer items-center justify-center bg-ink/80 transition-opacity",
-										isSelected
+										isSelected || bulkMode
 											? "opacity-100"
 											: "opacity-0 group-hover:opacity-100 focus-within:opacity-100",
 									)}
@@ -195,7 +259,14 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 								</label>
 							</div>
 
-							<div className="absolute inset-x-0 bottom-0 flex justify-center gap-1 bg-gradient-to-t from-ink to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+							<div
+								className={cn(
+									"absolute inset-x-0 bottom-0 flex justify-center gap-1 bg-gradient-to-t from-ink to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100",
+									// En mode sélection la vignette entière est une case à cocher :
+									// les actions unitaires n'ont plus à intercepter le clic.
+									bulkMode && "hidden",
+								)}
+							>
 								<button
 									type="button"
 									onClick={() => publishMany([photo.id], !photo.published)}
@@ -235,8 +306,11 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 
 			{selected.size > 0 && (
 				<div className="sticky bottom-6 z-40 mx-auto mt-8 flex w-fit flex-wrap items-center gap-2 border border-line bg-ink-soft/95 px-4 py-3 text-xs backdrop-blur-sm">
-					<span className="pr-2 tracking-editorial text-paper">
-						{selected.size} sélectionnée{selected.size > 1 ? "s" : ""}
+					<span className="flex items-center gap-2 pr-2 tracking-editorial text-paper">
+						{isPending && <Loader2 size={13} className="animate-spin text-accent" />}
+						{isPending
+							? "Traitement en cours…"
+							: `${selected.size} sélectionnée${selected.size > 1 ? "s" : ""}`}
 					</span>
 					<button
 						type="button"
