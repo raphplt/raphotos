@@ -30,10 +30,17 @@ export type AdminPhoto = Pick<
 	| "featured"
 > & { album_title: string | null };
 
-const ADMIN_PHOTO_COLUMNS =
-	"id, slug, album_id, width, height, title, caption, taken_at, camera, lens, iso, aperture, shutter_speed, focal_length, published, featured";
+const ADMIN_PHOTO_COLUMNS_BASE =
+	"id, slug, album_id, width, height, title, caption, taken_at, camera, lens, iso, aperture, shutter_speed, focal_length, published";
+
+const ADMIN_PHOTO_COLUMNS = `${ADMIN_PHOTO_COLUMNS_BASE}, featured`;
 
 export const ADMIN_PHOTOS_LIMIT = 1200;
+
+/** `42703` = undefined_column : la migration 0004 n'est pas encore appliquée. */
+function isMissingFeaturedColumn(error: { code?: string; message?: string }) {
+	return error.code === "42703" && Boolean(error.message?.includes("featured"));
+}
 
 export async function getAdminPhotos(options?: {
 	albumId?: string;
@@ -42,26 +49,48 @@ export async function getAdminPhotos(options?: {
 	limit?: number;
 }): Promise<AdminPhoto[]> {
 	const supabase = createSupabaseAdminClient();
-	let query = supabase
-		.from("photos")
-		.select(`${ADMIN_PHOTO_COLUMNS}, albums!photos_album_id_fkey(title)`)
-		.order("created_at", { ascending: false })
-		.limit(options?.limit ?? ADMIN_PHOTOS_LIMIT);
 
-	if (options?.albumId) query = query.eq("album_id", options.albumId);
-	if (options?.onlyDrafts) query = query.eq("published", false);
-	if (options?.onlyFeatured) query = query.eq("featured", true);
+	const run = (columns: string, withFeatured: boolean) => {
+		let query = supabase
+			.from("photos")
+			.select(`${columns}, albums!photos_album_id_fkey(title)`)
+			.order("created_at", { ascending: false })
+			.limit(options?.limit ?? ADMIN_PHOTOS_LIMIT);
 
-	const { data } = await query;
+		if (options?.albumId) query = query.eq("album_id", options.albumId);
+		if (options?.onlyDrafts) query = query.eq("published", false);
+		if (withFeatured && options?.onlyFeatured) query = query.eq("featured", true);
+		return query;
+	};
 
-	type Row = Omit<AdminPhoto, "album_title"> & {
+	let { data, error } = await run(ADMIN_PHOTO_COLUMNS, true);
+
+	if (error && isMissingFeaturedColumn(error)) {
+		// Sans la colonne, aucune photo n'est épinglée : le filtre est vide.
+		if (options?.onlyFeatured) return [];
+		({ data, error } = await run(ADMIN_PHOTO_COLUMNS_BASE, false));
+	}
+
+	if (error) {
+		// Renvoyer [] en silence donnait « 0 photo affichée » pour une simple
+		// erreur SQL : impossible à diagnostiquer depuis l'interface.
+		console.error("getAdminPhotos:", error.message);
+		throw new Error(`Lecture des photos impossible : ${error.message}`);
+	}
+
+	type Row = Omit<AdminPhoto, "album_title" | "featured"> & {
+		featured?: boolean;
 		albums?: { title: string } | { title: string }[] | null;
 	};
 
 	return ((data as unknown as Row[] | null) ?? []).map((row) => {
 		const { albums, ...photo } = row;
 		const album = Array.isArray(albums) ? albums[0] : albums;
-		return { ...photo, album_title: album?.title ?? null };
+		return {
+			...photo,
+			featured: photo.featured ?? false,
+			album_title: album?.title ?? null,
+		};
 	});
 }
 
@@ -166,6 +195,7 @@ export async function getPhotosPageCounts(): Promise<{
 			.from("photos")
 			.select("id", { count: "exact", head: true })
 			.eq("published", false),
+		// Compte nul tant que la migration 0004 n'est pas appliquée.
 		supabase
 			.from("photos")
 			.select("id", { count: "exact", head: true })
