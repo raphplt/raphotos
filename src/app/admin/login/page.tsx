@@ -16,12 +16,19 @@ export default function AdminLoginPage() {
 		event.preventDefault();
 		setStatus("sending");
 
+		// Le middleware pose « next » en arrivant ici ; on le fait suivre pour
+		// revenir sur la page demandée après l'échange du code.
+		const next = new URLSearchParams(window.location.search).get("next");
+		const callback = new URL("/admin/callback", window.location.origin);
+		if (next?.startsWith("/") && !next.startsWith("//")) {
+			callback.searchParams.set("next", next);
+		}
+
 		const supabase = createSupabaseBrowserClient();
 		const { error } = await supabase.auth.signInWithOtp({
 			email,
 			options: {
-				emailRedirectTo: `${window.location.origin}/admin/callback`,
-
+				emailRedirectTo: callback.toString(),
 				shouldCreateUser: false,
 			},
 		});

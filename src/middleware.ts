@@ -31,11 +31,14 @@ export async function middleware(request: NextRequest) {
 
 	const { pathname } = request.nextUrl;
 	const isLoginRoute = pathname.startsWith("/admin/login");
+	// On arrive sur le callback avec un code à échanger, donc forcément pas
+	// encore authentifié : le protéger rendrait le lien magique inutilisable.
+	const isCallbackRoute = pathname.startsWith("/admin/callback");
 	const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
 	const isAdmin =
 		Boolean(user?.email) && user!.email!.toLowerCase() === adminEmail;
 
-	if (pathname.startsWith("/admin") && !isLoginRoute && !isAdmin) {
+	if (pathname.startsWith("/admin") && !isLoginRoute && !isCallbackRoute && !isAdmin) {
 		const redirect = request.nextUrl.clone();
 		redirect.pathname = "/admin/login";
 		redirect.searchParams.set("next", pathname);
