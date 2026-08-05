@@ -9,6 +9,7 @@ import {
 	setPhotosPublished,
 	updatePhotoDetails,
 } from "@/app/admin/actions";
+import PhotoPreview from "@/components/admin/photo-preview";
 import { variantUrl } from "@/lib/image-variants";
 import type { AdminPhoto } from "@/lib/admin-queries";
 import type { Album } from "@/lib/types";
@@ -21,6 +22,7 @@ interface PhotoManagerProps {
 
 export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 	const [editing, setEditing] = useState<AdminPhoto | null>(null);
+	const [previewIndex, setPreviewIndex] = useState<number | null>(null);
 	const [items, setItems] = useState(photos);
 	const [selected, setSelected] = useState<Set<string>>(new Set());
 	const [notice, setNotice] = useState<string | null>(null);
@@ -98,6 +100,7 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 		}
 
 		const idSet = new Set(ids);
+		setPreviewIndex(null);
 		startTransition(async () => {
 			const result = await deletePhotos(ids);
 			if ("error" in result) {
@@ -137,7 +140,7 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 			</div>
 
 			<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-				{optimisticItems.map((photo) => {
+				{optimisticItems.map((photo, index) => {
 					const isSelected = selected.has(photo.id);
 
 					return (
@@ -149,14 +152,21 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 									isSelected && "ring-2 ring-accent",
 								)}
 							>
-								<Image
-									src={variantUrl(photo.slug, "thumb")}
-									alt={photo.title ?? photo.slug}
-									width={photo.width}
-									height={photo.height}
-									sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-									className="aspect-square w-full object-cover"
-								/>
+								<button
+									type="button"
+									onClick={() => setPreviewIndex(index)}
+									aria-label={`Agrandir ${photo.title ?? photo.slug}`}
+									className="block w-full cursor-zoom-in"
+								>
+									<Image
+										src={variantUrl(photo.slug, "thumb")}
+										alt={photo.title ?? photo.slug}
+										width={photo.width}
+										height={photo.height}
+										sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+										className="aspect-square w-full object-cover"
+									/>
+								</button>
 
 								{!photo.published && (
 									<span className="absolute left-2 top-2 bg-ink/90 px-2 py-1 text-[10px] tracking-editorial text-muted">
@@ -261,6 +271,25 @@ export default function PhotoManager({ photos, albums }: PhotoManagerProps) {
 						<X size={14} />
 					</button>
 				</div>
+			)}
+
+			{previewIndex !== null && optimisticItems[previewIndex] && (
+				<PhotoPreview
+					photos={optimisticItems}
+					index={previewIndex}
+					isSelected={selected.has(optimisticItems[previewIndex].id)}
+					onClose={() => setPreviewIndex(null)}
+					onNavigate={setPreviewIndex}
+					onToggleSelect={(photo) => toggleSelected(photo, false)}
+					onTogglePublished={(photo) =>
+						publishMany([photo.id], !photo.published)
+					}
+					onEdit={(photo) => {
+						setPreviewIndex(null);
+						setEditing(photo);
+					}}
+					onDelete={(photo) => removeMany([photo.id])}
+				/>
 			)}
 
 			{editing && (
